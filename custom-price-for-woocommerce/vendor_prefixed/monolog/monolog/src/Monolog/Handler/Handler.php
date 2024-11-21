@@ -16,12 +16,12 @@ namespace CPWFreeVendor\Monolog\Handler;
  *
  * @author Jordi Boggiano <j.boggiano@seld.be>
  */
-abstract class Handler implements \CPWFreeVendor\Monolog\Handler\HandlerInterface
+abstract class Handler implements HandlerInterface
 {
     /**
      * {@inheritDoc}
      */
-    public function handleBatch(array $records) : void
+    public function handleBatch(array $records): void
     {
         foreach ($records as $record) {
             $this->handle($record);
@@ -30,7 +30,7 @@ abstract class Handler implements \CPWFreeVendor\Monolog\Handler\HandlerInterfac
     /**
      * {@inheritDoc}
      */
-    public function close() : void
+    public function close(): void
     {
     }
     public function __destruct()

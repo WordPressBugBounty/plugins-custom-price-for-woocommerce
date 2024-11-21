@@ -7,7 +7,7 @@ use CPWFreeVendor\Monolog\Logger;
 /**
  * Class WooCommerceFactory
  */
-class WooCommerceHandler extends \CPWFreeVendor\Monolog\Handler\AbstractProcessingHandler
+class WooCommerceHandler extends AbstractProcessingHandler
 {
     const DEFAULT_WC_SOURCE = 'wpdesk-logger';
     /** @var \WC_Logger_Interface */
@@ -20,18 +20,18 @@ class WooCommerceHandler extends \CPWFreeVendor\Monolog\Handler\AbstractProcessi
      * @param  array $record
      * @return void
      */
-    protected function write(array $record) : void
+    protected function write(array $record): void
     {
-        $context = \array_merge(['source' => $this->channel], $record['extra'], $record['context']);
+        $context = array_merge(['source' => $this->channel], $record['extra'], $record['context']);
         $this->wc_logger->log($this->convertMonologLevelToWC($record['level']), $record['message'], $context);
     }
     /**
      * @param int $level
      * @return string
      */
-    private function convertMonologLevelToWC($level) : string
+    private function convertMonologLevelToWC($level): string
     {
-        return \CPWFreeVendor\Monolog\Logger::getLevelName($level);
+        return Logger::getLevelName($level);
     }
     public function __construct(\WC_Logger_Interface $originalWcLogger, string $channel = self::DEFAULT_WC_SOURCE)
     {

@@ -17,7 +17,7 @@ if (!\defined('ABSPATH')) {
 	class="cpw" <?php 
 echo \CPWFreeVendor\WPDesk\Library\CustomPrice\Helper::get_data_attributes($cpw_product, $suffix);
 ?> > <?php 
-// phpcs:ignore WordPress.Security.EscapeOutput
+// phpcs:ignore WordPress.Security.EscapeOutput 
 ?>
 
 	<?php 

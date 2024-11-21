@@ -8,17 +8,16 @@ use CPWFreeVendor\WPDesk\Library\Marketing\Boxes\Assets;
 use CPWFreeVendor\WPDesk\Library\CustomPrice\Integration;
 use CPWFreeVendor\WPDesk\Library\Marketing\Boxes\MarketingBoxes;
 use CPWFreeVendor\WPDesk\Library\CustomPrice\Settings\SettingsPage;
-class SupportTab extends \CPWFreeVendor\WPDesk\Library\CustomPrice\Settings\Tabs\BaseTab implements \CPWFreeVendor\WPDesk\PluginBuilder\Plugin\Hookable
+class SupportTab extends BaseTab implements Hookable
 {
     /**
      * @var Renderer
      */
     protected $renderer;
-    public function __construct(\CPWFreeVendor\WPDesk\View\Renderer\Renderer $renderer)
+    public function __construct(Renderer $renderer)
     {
         $this->renderer = $renderer;
         $this->tab_id = 'support';
-        $this->tab_label = \__('Start Here', 'custom-price-for-woocommerce');
     }
     public function hooks()
     {
@@ -26,6 +25,10 @@ class SupportTab extends \CPWFreeVendor\WPDesk\Library\CustomPrice\Settings\Tabs
         \add_action('woocommerce_admin_field_cp_support_settings', [$this, 'cp_support_settings']);
         \add_filter('woocommerce_get_settings_custom_price', [$this, 'add_fields'], 10, 2);
         \add_action('admin_enqueue_scripts', [$this, 'load_assets_for_marketing_page']);
+    }
+    public function get_tab_label()
+    {
+        return __('Start Here', 'custom-price-for-woocommerce');
     }
     /**
      * Get settings array
@@ -47,12 +50,12 @@ class SupportTab extends \CPWFreeVendor\WPDesk\Library\CustomPrice\Settings\Tabs
      */
     public function cp_support_settings()
     {
-        $local = \get_locale();
+        $local = get_locale();
         if ($local === 'en_US') {
             $local = 'en';
         }
-        $slug = \CPWFreeVendor\WPDesk\Library\CustomPrice\Integration::is_super() ? 'custom-price-for-woocommerce-pro' : 'custom-price-for-woocommerce';
-        $boxes = new \CPWFreeVendor\WPDesk\Library\Marketing\Boxes\MarketingBoxes($slug, $local);
+        $slug = Integration::is_super() ? 'custom-price-for-woocommerce-pro' : 'custom-price-for-woocommerce';
+        $boxes = new MarketingBoxes($slug, $local);
         $this->renderer->output_render('marketing-page', ['boxes' => $boxes]);
     }
     /**
@@ -61,12 +64,12 @@ class SupportTab extends \CPWFreeVendor\WPDesk\Library\CustomPrice\Settings\Tabs
      *
      * @return void
      */
-    public function load_assets_for_marketing_page() : void
+    public function load_assets_for_marketing_page(): void
     {
         if (!isset($_GET['page']) || !isset($_GET['tab']) || !isset($_GET['section']) || 'wc-settings' !== $_GET['page'] || 'custom_price' !== $_GET['tab'] || 'support' !== $_GET['section']) {
             return;
         }
-        \CPWFreeVendor\WPDesk\Library\Marketing\Boxes\Assets::enqueue_assets();
-        \CPWFreeVendor\WPDesk\Library\Marketing\Boxes\Assets::enqueue_owl_assets();
+        Assets::enqueue_assets();
+        Assets::enqueue_owl_assets();
     }
 }

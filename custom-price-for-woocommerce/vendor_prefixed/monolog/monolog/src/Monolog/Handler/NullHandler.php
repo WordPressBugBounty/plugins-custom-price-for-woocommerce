@@ -12,7 +12,7 @@ declare (strict_types=1);
 namespace CPWFreeVendor\Monolog\Handler;
 
 use CPWFreeVendor\Monolog\Logger;
-use Psr\Log\LogLevel;
+use CPWFreeVendor\Psr\Log\LogLevel;
 /**
  * Blackhole
  *
@@ -24,7 +24,7 @@ use Psr\Log\LogLevel;
  * @phpstan-import-type Level from \Monolog\Logger
  * @phpstan-import-type LevelName from \Monolog\Logger
  */
-class NullHandler extends \CPWFreeVendor\Monolog\Handler\Handler
+class NullHandler extends Handler
 {
     /**
      * @var int
@@ -35,21 +35,21 @@ class NullHandler extends \CPWFreeVendor\Monolog\Handler\Handler
      *
      * @phpstan-param Level|LevelName|LogLevel::* $level
      */
-    public function __construct($level = \CPWFreeVendor\Monolog\Logger::DEBUG)
+    public function __construct($level = Logger::DEBUG)
     {
-        $this->level = \CPWFreeVendor\Monolog\Logger::toMonologLevel($level);
+        $this->level = Logger::toMonologLevel($level);
     }
     /**
      * {@inheritDoc}
      */
-    public function isHandling(array $record) : bool
+    public function isHandling(array $record): bool
     {
         return $record['level'] >= $this->level;
     }
     /**
      * {@inheritDoc}
      */
-    public function handle(array $record) : bool
+    public function handle(array $record): bool
     {
         return $record['level'] >= $this->level;
     }

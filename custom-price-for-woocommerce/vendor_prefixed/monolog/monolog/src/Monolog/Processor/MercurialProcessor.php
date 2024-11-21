@@ -12,7 +12,7 @@ declare (strict_types=1);
 namespace CPWFreeVendor\Monolog\Processor;
 
 use CPWFreeVendor\Monolog\Logger;
-use Psr\Log\LogLevel;
+use CPWFreeVendor\Psr\Log\LogLevel;
 /**
  * Injects Hg branch and Hg revision number in all records
  *
@@ -21,7 +21,7 @@ use Psr\Log\LogLevel;
  * @phpstan-import-type LevelName from \Monolog\Logger
  * @phpstan-import-type Level from \Monolog\Logger
  */
-class MercurialProcessor implements \CPWFreeVendor\Monolog\Processor\ProcessorInterface
+class MercurialProcessor implements ProcessorInterface
 {
     /** @var Level */
     private $level;
@@ -32,14 +32,14 @@ class MercurialProcessor implements \CPWFreeVendor\Monolog\Processor\ProcessorIn
      *
      * @phpstan-param Level|LevelName|LogLevel::* $level
      */
-    public function __construct($level = \CPWFreeVendor\Monolog\Logger::DEBUG)
+    public function __construct($level = Logger::DEBUG)
     {
-        $this->level = \CPWFreeVendor\Monolog\Logger::toMonologLevel($level);
+        $this->level = Logger::toMonologLevel($level);
     }
     /**
      * {@inheritDoc}
      */
-    public function __invoke(array $record) : array
+    public function __invoke(array $record): array
     {
         // return if the level is not high enough
         if ($record['level'] < $this->level) {
@@ -51,13 +51,13 @@ class MercurialProcessor implements \CPWFreeVendor\Monolog\Processor\ProcessorIn
     /**
      * @return array{branch: string, revision: string}|array<never>
      */
-    private static function getMercurialInfo() : array
+    private static function getMercurialInfo(): array
     {
         if (self::$cache) {
             return self::$cache;
         }
-        $result = \explode(' ', \trim(`hg id -nb`));
-        if (\count($result) >= 3) {
+        $result = explode(' ', trim(`hg id -nb`));
+        if (count($result) >= 3) {
             return self::$cache = ['branch' => $result[1], 'revision' => $result[2]];
         }
         return self::$cache = [];

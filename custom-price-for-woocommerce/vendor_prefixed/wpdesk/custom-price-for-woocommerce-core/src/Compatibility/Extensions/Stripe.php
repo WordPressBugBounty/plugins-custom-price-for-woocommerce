@@ -15,11 +15,11 @@ use CPWFreeVendor\WPDesk\Library\CustomPrice\Helper;
 /**
  * The Main Stripe class
  **/
-class Stripe implements \CPWFreeVendor\WPDesk\PluginBuilder\Plugin\Hookable
+class Stripe implements Hookable
 {
     public function hooks()
     {
-        \add_filter('wc_stripe_hide_payment_request_on_product_page', [$this, 'hide_request_on_cpw']);
+        add_filter('wc_stripe_hide_payment_request_on_product_page', [$this, 'hide_request_on_cpw']);
     }
     /**
      * @param bool    $hide
@@ -27,9 +27,9 @@ class Stripe implements \CPWFreeVendor\WPDesk\PluginBuilder\Plugin\Hookable
      *
      * @return  bool
      */
-    public function hide_request_on_cpw(bool $hide, \WP_Post $post) : bool
+    public function hide_request_on_cpw(bool $hide, WP_Post $post): bool
     {
-        if (\CPWFreeVendor\WPDesk\Library\CustomPrice\Helper::is_cpw($post->ID) || \CPWFreeVendor\WPDesk\Library\CustomPrice\Helper::has_cpw($post->ID)) {
+        if (Helper::is_cpw($post->ID) || Helper::has_cpw($post->ID)) {
             $hide = \true;
         }
         return $hide;

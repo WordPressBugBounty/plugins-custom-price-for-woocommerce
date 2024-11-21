@@ -33,12 +33,12 @@ use CPWFreeVendor\Monolog\Formatter\FormatterInterface;
  *
  * @author Kris Buist <krisbuist@gmail.com>
  */
-class OverflowHandler extends \CPWFreeVendor\Monolog\Handler\AbstractHandler implements \CPWFreeVendor\Monolog\Handler\FormattableHandlerInterface
+class OverflowHandler extends AbstractHandler implements FormattableHandlerInterface
 {
     /** @var HandlerInterface */
     private $handler;
     /** @var int[] */
-    private $thresholdMap = [\CPWFreeVendor\Monolog\Logger::DEBUG => 0, \CPWFreeVendor\Monolog\Logger::INFO => 0, \CPWFreeVendor\Monolog\Logger::NOTICE => 0, \CPWFreeVendor\Monolog\Logger::WARNING => 0, \CPWFreeVendor\Monolog\Logger::ERROR => 0, \CPWFreeVendor\Monolog\Logger::CRITICAL => 0, \CPWFreeVendor\Monolog\Logger::ALERT => 0, \CPWFreeVendor\Monolog\Logger::EMERGENCY => 0];
+    private $thresholdMap = [Logger::DEBUG => 0, Logger::INFO => 0, Logger::NOTICE => 0, Logger::WARNING => 0, Logger::ERROR => 0, Logger::CRITICAL => 0, Logger::ALERT => 0, Logger::EMERGENCY => 0];
     /**
      * Buffer of all messages passed to the handler before the threshold was reached
      *
@@ -49,7 +49,7 @@ class OverflowHandler extends \CPWFreeVendor\Monolog\Handler\AbstractHandler imp
      * @param HandlerInterface $handler
      * @param int[]            $thresholdMap Dictionary of logger level => threshold
      */
-    public function __construct(\CPWFreeVendor\Monolog\Handler\HandlerInterface $handler, array $thresholdMap = [], $level = \CPWFreeVendor\Monolog\Logger::DEBUG, bool $bubble = \true)
+    public function __construct(HandlerInterface $handler, array $thresholdMap = [], $level = Logger::DEBUG, bool $bubble = \true)
     {
         $this->handler = $handler;
         foreach ($thresholdMap as $thresholdLevel => $threshold) {
@@ -69,7 +69,7 @@ class OverflowHandler extends \CPWFreeVendor\Monolog\Handler\AbstractHandler imp
      *
      * {@inheritDoc}
      */
-    public function handle(array $record) : bool
+    public function handle(array $record): bool
     {
         if ($record['level'] < $this->level) {
             return \false;
@@ -98,22 +98,22 @@ class OverflowHandler extends \CPWFreeVendor\Monolog\Handler\AbstractHandler imp
     /**
      * {@inheritDoc}
      */
-    public function setFormatter(\CPWFreeVendor\Monolog\Formatter\FormatterInterface $formatter) : \CPWFreeVendor\Monolog\Handler\HandlerInterface
+    public function setFormatter(FormatterInterface $formatter): HandlerInterface
     {
-        if ($this->handler instanceof \CPWFreeVendor\Monolog\Handler\FormattableHandlerInterface) {
+        if ($this->handler instanceof FormattableHandlerInterface) {
             $this->handler->setFormatter($formatter);
             return $this;
         }
-        throw new \UnexpectedValueException('The nested handler of type ' . \get_class($this->handler) . ' does not support formatters.');
+        throw new \UnexpectedValueException('The nested handler of type ' . get_class($this->handler) . ' does not support formatters.');
     }
     /**
      * {@inheritDoc}
      */
-    public function getFormatter() : \CPWFreeVendor\Monolog\Formatter\FormatterInterface
+    public function getFormatter(): FormatterInterface
     {
-        if ($this->handler instanceof \CPWFreeVendor\Monolog\Handler\FormattableHandlerInterface) {
+        if ($this->handler instanceof FormattableHandlerInterface) {
             return $this->handler->getFormatter();
         }
-        throw new \UnexpectedValueException('The nested handler of type ' . \get_class($this->handler) . ' does not support formatters.');
+        throw new \UnexpectedValueException('The nested handler of type ' . get_class($this->handler) . ' does not support formatters.');
     }
 }

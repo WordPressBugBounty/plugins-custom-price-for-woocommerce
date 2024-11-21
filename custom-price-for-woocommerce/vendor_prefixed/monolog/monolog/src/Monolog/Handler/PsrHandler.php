@@ -12,7 +12,7 @@ declare (strict_types=1);
 namespace CPWFreeVendor\Monolog\Handler;
 
 use CPWFreeVendor\Monolog\Logger;
-use Psr\Log\LoggerInterface;
+use CPWFreeVendor\Psr\Log\LoggerInterface;
 use CPWFreeVendor\Monolog\Formatter\FormatterInterface;
 /**
  * Proxies log messages to an existing PSR-3 compliant logger.
@@ -23,7 +23,7 @@ use CPWFreeVendor\Monolog\Formatter\FormatterInterface;
  *
  * @author Michael Moussa <michael.moussa@gmail.com>
  */
-class PsrHandler extends \CPWFreeVendor\Monolog\Handler\AbstractHandler implements \CPWFreeVendor\Monolog\Handler\FormattableHandlerInterface
+class PsrHandler extends AbstractHandler implements FormattableHandlerInterface
 {
     /**
      * PSR-3 compliant logger
@@ -38,7 +38,7 @@ class PsrHandler extends \CPWFreeVendor\Monolog\Handler\AbstractHandler implemen
     /**
      * @param LoggerInterface $logger The underlying PSR-3 compliant logger to which messages will be proxied
      */
-    public function __construct(\Psr\Log\LoggerInterface $logger, $level = \CPWFreeVendor\Monolog\Logger::DEBUG, bool $bubble = \true)
+    public function __construct(LoggerInterface $logger, $level = Logger::DEBUG, bool $bubble = \true)
     {
         parent::__construct($level, $bubble);
         $this->logger = $logger;
@@ -46,16 +46,16 @@ class PsrHandler extends \CPWFreeVendor\Monolog\Handler\AbstractHandler implemen
     /**
      * {@inheritDoc}
      */
-    public function handle(array $record) : bool
+    public function handle(array $record): bool
     {
         if (!$this->isHandling($record)) {
             return \false;
         }
         if ($this->formatter) {
             $formatted = $this->formatter->format($record);
-            $this->logger->log(\strtolower($record['level_name']), (string) $formatted, $record['context']);
+            $this->logger->log(strtolower($record['level_name']), (string) $formatted, $record['context']);
         } else {
-            $this->logger->log(\strtolower($record['level_name']), $record['message'], $record['context']);
+            $this->logger->log(strtolower($record['level_name']), $record['message'], $record['context']);
         }
         return \false === $this->bubble;
     }
@@ -64,7 +64,7 @@ class PsrHandler extends \CPWFreeVendor\Monolog\Handler\AbstractHandler implemen
      *
      * @param FormatterInterface $formatter
      */
-    public function setFormatter(\CPWFreeVendor\Monolog\Formatter\FormatterInterface $formatter) : \CPWFreeVendor\Monolog\Handler\HandlerInterface
+    public function setFormatter(FormatterInterface $formatter): HandlerInterface
     {
         $this->formatter = $formatter;
         return $this;
@@ -74,7 +74,7 @@ class PsrHandler extends \CPWFreeVendor\Monolog\Handler\AbstractHandler implemen
      *
      * @return FormatterInterface
      */
-    public function getFormatter() : \CPWFreeVendor\Monolog\Formatter\FormatterInterface
+    public function getFormatter(): FormatterInterface
     {
         if (!$this->formatter) {
             throw new \LogicException('No formatter has been set and this handler does not have a default formatter');

@@ -4,11 +4,11 @@ namespace CPWFreeVendor\WPDesk\Library\CustomPrice\Settings;
 
 use CPWFreeVendor\WPDesk\PluginBuilder\Plugin\Hookable;
 use WC_Settings_Page;
-class SettingsIntegration implements \CPWFreeVendor\WPDesk\PluginBuilder\Plugin\Hookable
+class SettingsIntegration implements Hookable
 {
     public function hooks()
     {
-        \add_filter('woocommerce_get_settings_pages', [$this, 'add_settings_page'], 10, 1);
+        add_filter('woocommerce_get_settings_pages', [$this, 'add_settings_page'], 10, 1);
     }
     /**
      * @param array<WC_Settings_Page> $settings
@@ -17,7 +17,7 @@ class SettingsIntegration implements \CPWFreeVendor\WPDesk\PluginBuilder\Plugin\
      */
     public function add_settings_page($settings)
     {
-        $settings[] = new \CPWFreeVendor\WPDesk\Library\CustomPrice\Settings\SettingsPage();
+        $settings[] = new SettingsPage();
         return $settings;
     }
 }

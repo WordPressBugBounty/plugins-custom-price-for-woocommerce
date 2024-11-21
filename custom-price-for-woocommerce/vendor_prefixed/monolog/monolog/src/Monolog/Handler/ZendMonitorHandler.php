@@ -22,7 +22,7 @@ use CPWFreeVendor\Monolog\Logger;
  *
  * @phpstan-import-type FormattedRecord from AbstractProcessingHandler
  */
-class ZendMonitorHandler extends \CPWFreeVendor\Monolog\Handler\AbstractProcessingHandler
+class ZendMonitorHandler extends AbstractProcessingHandler
 {
     /**
      * Monolog level / ZendMonitor Custom Event priority map
@@ -33,21 +33,21 @@ class ZendMonitorHandler extends \CPWFreeVendor\Monolog\Handler\AbstractProcessi
     /**
      * @throws MissingExtensionException
      */
-    public function __construct($level = \CPWFreeVendor\Monolog\Logger::DEBUG, bool $bubble = \true)
+    public function __construct($level = Logger::DEBUG, bool $bubble = \true)
     {
-        if (!\function_exists('CPWFreeVendor\\zend_monitor_custom_event')) {
-            throw new \CPWFreeVendor\Monolog\Handler\MissingExtensionException('You must have Zend Server installed with Zend Monitor enabled in order to use this handler');
+        if (!function_exists('CPWFreeVendor\zend_monitor_custom_event')) {
+            throw new MissingExtensionException('You must have Zend Server installed with Zend Monitor enabled in order to use this handler');
         }
         //zend monitor constants are not defined if zend monitor is not enabled.
-        $this->levelMap = [\CPWFreeVendor\Monolog\Logger::DEBUG => \CPWFreeVendor\ZEND_MONITOR_EVENT_SEVERITY_INFO, \CPWFreeVendor\Monolog\Logger::INFO => \CPWFreeVendor\ZEND_MONITOR_EVENT_SEVERITY_INFO, \CPWFreeVendor\Monolog\Logger::NOTICE => \CPWFreeVendor\ZEND_MONITOR_EVENT_SEVERITY_INFO, \CPWFreeVendor\Monolog\Logger::WARNING => \CPWFreeVendor\ZEND_MONITOR_EVENT_SEVERITY_WARNING, \CPWFreeVendor\Monolog\Logger::ERROR => \CPWFreeVendor\ZEND_MONITOR_EVENT_SEVERITY_ERROR, \CPWFreeVendor\Monolog\Logger::CRITICAL => \CPWFreeVendor\ZEND_MONITOR_EVENT_SEVERITY_ERROR, \CPWFreeVendor\Monolog\Logger::ALERT => \CPWFreeVendor\ZEND_MONITOR_EVENT_SEVERITY_ERROR, \CPWFreeVendor\Monolog\Logger::EMERGENCY => \CPWFreeVendor\ZEND_MONITOR_EVENT_SEVERITY_ERROR];
+        $this->levelMap = [Logger::DEBUG => \CPWFreeVendor\ZEND_MONITOR_EVENT_SEVERITY_INFO, Logger::INFO => \CPWFreeVendor\ZEND_MONITOR_EVENT_SEVERITY_INFO, Logger::NOTICE => \CPWFreeVendor\ZEND_MONITOR_EVENT_SEVERITY_INFO, Logger::WARNING => \CPWFreeVendor\ZEND_MONITOR_EVENT_SEVERITY_WARNING, Logger::ERROR => \CPWFreeVendor\ZEND_MONITOR_EVENT_SEVERITY_ERROR, Logger::CRITICAL => \CPWFreeVendor\ZEND_MONITOR_EVENT_SEVERITY_ERROR, Logger::ALERT => \CPWFreeVendor\ZEND_MONITOR_EVENT_SEVERITY_ERROR, Logger::EMERGENCY => \CPWFreeVendor\ZEND_MONITOR_EVENT_SEVERITY_ERROR];
         parent::__construct($level, $bubble);
     }
     /**
      * {@inheritDoc}
      */
-    protected function write(array $record) : void
+    protected function write(array $record): void
     {
-        $this->writeZendMonitorCustomEvent(\CPWFreeVendor\Monolog\Logger::getLevelName($record['level']), $record['message'], $record['formatted'], $this->levelMap[$record['level']]);
+        $this->writeZendMonitorCustomEvent(Logger::getLevelName($record['level']), $record['message'], $record['formatted'], $this->levelMap[$record['level']]);
     }
     /**
      * Write to Zend Monitor Events
@@ -58,21 +58,21 @@ class ZendMonitorHandler extends \CPWFreeVendor\Monolog\Handler\AbstractProcessi
      *
      * @phpstan-param FormattedRecord $formatted
      */
-    protected function writeZendMonitorCustomEvent(string $type, string $message, array $formatted, int $severity) : void
+    protected function writeZendMonitorCustomEvent(string $type, string $message, array $formatted, int $severity): void
     {
         zend_monitor_custom_event($type, $message, $formatted, $severity);
     }
     /**
      * {@inheritDoc}
      */
-    public function getDefaultFormatter() : \CPWFreeVendor\Monolog\Formatter\FormatterInterface
+    public function getDefaultFormatter(): FormatterInterface
     {
-        return new \CPWFreeVendor\Monolog\Formatter\NormalizerFormatter();
+        return new NormalizerFormatter();
     }
     /**
      * @return array<int, int>
      */
-    public function getLevelMap() : array
+    public function getLevelMap(): array
     {
         return $this->levelMap;
     }

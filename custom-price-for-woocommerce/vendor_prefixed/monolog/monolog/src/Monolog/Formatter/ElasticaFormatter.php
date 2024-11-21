@@ -19,7 +19,7 @@ use CPWFreeVendor\Elastica\Document;
  *
  * @phpstan-import-type Record from \Monolog\Logger
  */
-class ElasticaFormatter extends \CPWFreeVendor\Monolog\Formatter\NormalizerFormatter
+class ElasticaFormatter extends NormalizerFormatter
 {
     /**
      * @var string Elastic search index name
@@ -36,7 +36,7 @@ class ElasticaFormatter extends \CPWFreeVendor\Monolog\Formatter\NormalizerForma
     public function __construct(string $index, ?string $type)
     {
         // elasticsearch requires a ISO 8601 format date with optional millisecond precision.
-        parent::__construct('Y-m-d\\TH:i:s.uP');
+        parent::__construct('Y-m-d\TH:i:s.uP');
         $this->index = $index;
         $this->type = $type;
     }
@@ -48,14 +48,14 @@ class ElasticaFormatter extends \CPWFreeVendor\Monolog\Formatter\NormalizerForma
         $record = parent::format($record);
         return $this->getDocument($record);
     }
-    public function getIndex() : string
+    public function getIndex(): string
     {
         return $this->index;
     }
     /**
      * @deprecated since Elastica 7 type has no effect
      */
-    public function getType() : string
+    public function getType(): string
     {
         /** @phpstan-ignore-next-line */
         return $this->type;
@@ -65,11 +65,11 @@ class ElasticaFormatter extends \CPWFreeVendor\Monolog\Formatter\NormalizerForma
      *
      * @phpstan-param Record $record
      */
-    protected function getDocument(array $record) : \CPWFreeVendor\Elastica\Document
+    protected function getDocument(array $record): Document
     {
-        $document = new \CPWFreeVendor\Elastica\Document();
+        $document = new Document();
         $document->setData($record);
-        if (\method_exists($document, 'setType')) {
+        if (method_exists($document, 'setType')) {
             /** @phpstan-ignore-next-line */
             $document->setType($this->type);
         }

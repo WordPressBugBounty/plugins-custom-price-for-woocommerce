@@ -2,7 +2,7 @@
 
 namespace CPWFreeVendor\WPDesk\Library\CustomPrice;
 
-use Psr\Log\LoggerInterface;
+use CPWFreeVendor\Psr\Log\LoggerInterface;
 use CPWFreeVendor\WPDesk\View\Renderer\Renderer;
 use CPWFreeVendor\WPDesk\View\Resolver\DirResolver;
 use CPWFreeVendor\WPDesk\View\Resolver\ChainResolver;
@@ -21,7 +21,7 @@ use CPWFreeVendor\WPDesk\Library\CustomPrice\Compatibility\ExtensionSupport;
  *
  * @package WPDesk\Library\CustomPrice
  */
-class Integration implements \CPWFreeVendor\WPDesk\PluginBuilder\Plugin\Hookable
+class Integration implements Hookable
 {
     use HookableParent;
     /**
@@ -46,50 +46,50 @@ class Integration implements \CPWFreeVendor\WPDesk\PluginBuilder\Plugin\Hookable
     /**
      * @return bool
      */
-    public static function is_super() : bool
+    public static function is_super(): bool
     {
         return self::$is_super;
     }
     /**
      * @return string
      */
-    protected final function get_library_url() : string
+    final protected function get_library_url(): string
     {
-        return \trailingslashit(\plugin_dir_url(\dirname(__FILE__)));
+        return trailingslashit(plugin_dir_url(dirname(__FILE__)));
     }
     /**
      * @return string
      */
-    protected final function get_library_path() : string
+    final protected function get_library_path(): string
     {
-        return \trailingslashit(\plugin_dir_path(\dirname(__FILE__)));
+        return trailingslashit(plugin_dir_path(dirname(__FILE__)));
     }
     /**
      * @return Renderer
      */
-    protected function get_renderer() : \CPWFreeVendor\WPDesk\View\Renderer\Renderer
+    protected function get_renderer(): Renderer
     {
-        $resolver = new \CPWFreeVendor\WPDesk\View\Resolver\ChainResolver();
-        $resolver->appendResolver(new \CPWFreeVendor\WPDesk\View\Resolver\DirResolver($this->get_library_path() . '/templates'));
-        return new \CPWFreeVendor\WPDesk\View\Renderer\SimplePhpRenderer($resolver);
+        $resolver = new ChainResolver();
+        $resolver->appendResolver(new DirResolver($this->get_library_path() . '/templates'));
+        return new SimplePhpRenderer($resolver);
     }
     /**
      * Fire hooks.
      */
     public function hooks()
     {
-        $display = new \CPWFreeVendor\WPDesk\Library\CustomPrice\Display($this->get_library_url(), $this->get_library_path());
-        $cart = new \CPWFreeVendor\WPDesk\Library\CustomPrice\Cart();
+        $display = new Display($this->get_library_url(), $this->get_library_path());
+        $cart = new Cart();
         $this->add_hookable($display);
         $this->add_hookable($cart);
-        $this->add_hookable(new \CPWFreeVendor\WPDesk\Library\CustomPrice\Order());
-        $this->add_hookable(new \CPWFreeVendor\WPDesk\Library\CustomPrice\Compatibility\ExtensionSupport($cart, $display));
-        $this->add_hookable(new \CPWFreeVendor\WPDesk\Library\CustomPrice\Admin\Admin($this->get_library_url(), $this->get_library_path()));
-        $this->add_hookable(new \CPWFreeVendor\WPDesk\Library\CustomPrice\Admin\Product\ProductFields());
-        $this->add_hookable(new \CPWFreeVendor\WPDesk\Library\CustomPrice\Admin\Product\SaveProductMeta());
-        $this->add_hookable(new \CPWFreeVendor\WPDesk\Library\CustomPrice\Settings\SettingsIntegration());
-        $this->add_hookable(new \CPWFreeVendor\WPDesk\Library\CustomPrice\Settings\Tabs\GeneralTab());
-        $this->add_hookable(new \CPWFreeVendor\WPDesk\Library\CustomPrice\Settings\Tabs\SupportTab($this->get_renderer()));
+        $this->add_hookable(new Order());
+        $this->add_hookable(new ExtensionSupport($cart, $display));
+        $this->add_hookable(new Admin($this->get_library_url(), $this->get_library_path()));
+        $this->add_hookable(new ProductFields());
+        $this->add_hookable(new SaveProductMeta());
+        $this->add_hookable(new Settings\SettingsIntegration());
+        $this->add_hookable(new Settings\Tabs\GeneralTab());
+        $this->add_hookable(new Settings\Tabs\SupportTab($this->get_renderer()));
         $this->hooks_on_hookable_objects();
     }
 }

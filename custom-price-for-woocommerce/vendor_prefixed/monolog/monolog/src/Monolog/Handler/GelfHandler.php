@@ -21,7 +21,7 @@ use CPWFreeVendor\Monolog\Formatter\FormatterInterface;
  * @author Matt Lehner <mlehner@gmail.com>
  * @author Benjamin Zikarsky <benjamin@zikarsky.de>
  */
-class GelfHandler extends \CPWFreeVendor\Monolog\Handler\AbstractProcessingHandler
+class GelfHandler extends AbstractProcessingHandler
 {
     /**
      * @var PublisherInterface the publisher object that sends the message to the server
@@ -30,7 +30,7 @@ class GelfHandler extends \CPWFreeVendor\Monolog\Handler\AbstractProcessingHandl
     /**
      * @param PublisherInterface $publisher a gelf publisher object
      */
-    public function __construct(\CPWFreeVendor\Gelf\PublisherInterface $publisher, $level = \CPWFreeVendor\Monolog\Logger::DEBUG, bool $bubble = \true)
+    public function __construct(PublisherInterface $publisher, $level = Logger::DEBUG, bool $bubble = \true)
     {
         parent::__construct($level, $bubble);
         $this->publisher = $publisher;
@@ -38,15 +38,15 @@ class GelfHandler extends \CPWFreeVendor\Monolog\Handler\AbstractProcessingHandl
     /**
      * {@inheritDoc}
      */
-    protected function write(array $record) : void
+    protected function write(array $record): void
     {
         $this->publisher->publish($record['formatted']);
     }
     /**
      * {@inheritDoc}
      */
-    protected function getDefaultFormatter() : \CPWFreeVendor\Monolog\Formatter\FormatterInterface
+    protected function getDefaultFormatter(): FormatterInterface
     {
-        return new \CPWFreeVendor\Monolog\Formatter\GelfMessageFormatter();
+        return new GelfMessageFormatter();
     }
 }

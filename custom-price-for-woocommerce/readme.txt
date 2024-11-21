@@ -4,9 +4,9 @@ Contributors: wpdesk,piotrpo,marcinkolanko
 Donate link: https://www.wpdesk.net/products/custom-price-for-woocommerce-pro/
 Tags: custom price, name your price woocommerce, name your price, price on request, call for price
 Requires at least: 5.0
-Tested up to: 6.6
-Stable tag: 1.1.10
-Requires PHP: 7.3
+Tested up to: 6.7
+Stable tag: 1.1.11
+Requires PHP: 7.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -175,6 +175,10 @@ Read some articles and see how to use the plugin in your WooCommerce.
 9. Suggest Your Price - Free Plugin
 
 == Changelog ==
+
+= 1.1.11 - 2024-11-20 =
+* Added support for WordPress 6.7
+* Added support for WooCommerce 9.5
 
 = 1.1.10 - 2024-09-07 =
 * Added support for WooCommerce 9.3

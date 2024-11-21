@@ -10,7 +10,7 @@ use CPWFreeVendor\Monolog\Registry;
  *
  * @package WPDesk\Logger
  */
-class BasicLoggerFactory implements \CPWFreeVendor\WPDesk\Logger\LoggerFactory
+class BasicLoggerFactory implements LoggerFactory
 {
     /** @var string Last created logger name/channel */
     private static $lastLoggerChannel;
@@ -24,12 +24,12 @@ class BasicLoggerFactory implements \CPWFreeVendor\WPDesk\Logger\LoggerFactory
      */
     public function createLogger($name, $handlers = array(), array $processors = array())
     {
-        if (\CPWFreeVendor\Monolog\Registry::hasLogger($name)) {
-            return \CPWFreeVendor\Monolog\Registry::getInstance($name);
+        if (Registry::hasLogger($name)) {
+            return Registry::getInstance($name);
         }
         self::$lastLoggerChannel = $name;
-        $logger = new \CPWFreeVendor\Monolog\Logger($name, $handlers, $processors);
-        \CPWFreeVendor\Monolog\Registry::addLogger($logger);
+        $logger = new Logger($name, $handlers, $processors);
+        Registry::addLogger($logger);
         return $logger;
     }
     /**
@@ -44,6 +44,6 @@ class BasicLoggerFactory implements \CPWFreeVendor\WPDesk\Logger\LoggerFactory
         if ($name === null) {
             $name = self::$lastLoggerChannel;
         }
-        return \CPWFreeVendor\Monolog\Registry::getInstance($name);
+        return Registry::getInstance($name);
     }
 }

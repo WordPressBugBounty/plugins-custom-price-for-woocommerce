@@ -16,7 +16,7 @@ use CPWFreeVendor\Monolog\Handler\FingersCrossed\ActivationStrategyInterface;
 use CPWFreeVendor\Monolog\Logger;
 use CPWFreeVendor\Monolog\ResettableInterface;
 use CPWFreeVendor\Monolog\Formatter\FormatterInterface;
-use Psr\Log\LogLevel;
+use CPWFreeVendor\Psr\Log\LogLevel;
 /**
  * Buffers all records until a certain level is reached
  *
@@ -37,7 +37,7 @@ use Psr\Log\LogLevel;
  * @phpstan-import-type Level from \Monolog\Logger
  * @phpstan-import-type LevelName from \Monolog\Logger
  */
-class FingersCrossedHandler extends \CPWFreeVendor\Monolog\Handler\Handler implements \CPWFreeVendor\Monolog\Handler\ProcessableHandlerInterface, \CPWFreeVendor\Monolog\ResettableInterface, \CPWFreeVendor\Monolog\Handler\FormattableHandlerInterface
+class FingersCrossedHandler extends Handler implements ProcessableHandlerInterface, ResettableInterface, FormattableHandlerInterface
 {
     use ProcessableHandlerTrait;
     /**
@@ -78,11 +78,11 @@ class FingersCrossedHandler extends \CPWFreeVendor\Monolog\Handler\Handler imple
     public function __construct($handler, $activationStrategy = null, int $bufferSize = 0, bool $bubble = \true, bool $stopBuffering = \true, $passthruLevel = null)
     {
         if (null === $activationStrategy) {
-            $activationStrategy = new \CPWFreeVendor\Monolog\Handler\FingersCrossed\ErrorLevelActivationStrategy(\CPWFreeVendor\Monolog\Logger::WARNING);
+            $activationStrategy = new ErrorLevelActivationStrategy(Logger::WARNING);
         }
         // convert simple int activationStrategy to an object
-        if (!$activationStrategy instanceof \CPWFreeVendor\Monolog\Handler\FingersCrossed\ActivationStrategyInterface) {
-            $activationStrategy = new \CPWFreeVendor\Monolog\Handler\FingersCrossed\ErrorLevelActivationStrategy($activationStrategy);
+        if (!$activationStrategy instanceof ActivationStrategyInterface) {
+            $activationStrategy = new ErrorLevelActivationStrategy($activationStrategy);
         }
         $this->handler = $handler;
         $this->activationStrategy = $activationStrategy;
@@ -90,34 +90,34 @@ class FingersCrossedHandler extends \CPWFreeVendor\Monolog\Handler\Handler imple
         $this->bubble = $bubble;
         $this->stopBuffering = $stopBuffering;
         if ($passthruLevel !== null) {
-            $this->passthruLevel = \CPWFreeVendor\Monolog\Logger::toMonologLevel($passthruLevel);
+            $this->passthruLevel = Logger::toMonologLevel($passthruLevel);
         }
-        if (!$this->handler instanceof \CPWFreeVendor\Monolog\Handler\HandlerInterface && !\is_callable($this->handler)) {
-            throw new \RuntimeException("The given handler (" . \json_encode($this->handler) . ") is not a callable nor a Monolog\\Handler\\HandlerInterface object");
+        if (!$this->handler instanceof HandlerInterface && !is_callable($this->handler)) {
+            throw new \RuntimeException("The given handler (" . json_encode($this->handler) . ") is not a callable nor a Monolog\\Handler\\HandlerInterface object");
         }
     }
     /**
      * {@inheritDoc}
      */
-    public function isHandling(array $record) : bool
+    public function isHandling(array $record): bool
     {
         return \true;
     }
     /**
      * Manually activate this logger regardless of the activation strategy
      */
-    public function activate() : void
+    public function activate(): void
     {
         if ($this->stopBuffering) {
             $this->buffering = \false;
         }
-        $this->getHandler(\end($this->buffer) ?: null)->handleBatch($this->buffer);
+        $this->getHandler(end($this->buffer) ?: null)->handleBatch($this->buffer);
         $this->buffer = [];
     }
     /**
      * {@inheritDoc}
      */
-    public function handle(array $record) : bool
+    public function handle(array $record): bool
     {
         if ($this->processors) {
             /** @var Record $record */
@@ -125,8 +125,8 @@ class FingersCrossedHandler extends \CPWFreeVendor\Monolog\Handler\Handler imple
         }
         if ($this->buffering) {
             $this->buffer[] = $record;
-            if ($this->bufferSize > 0 && \count($this->buffer) > $this->bufferSize) {
-                \array_shift($this->buffer);
+            if ($this->bufferSize > 0 && count($this->buffer) > $this->bufferSize) {
+                array_shift($this->buffer);
             }
             if ($this->activationStrategy->isHandlerActivated($record)) {
                 $this->activate();
@@ -139,7 +139,7 @@ class FingersCrossedHandler extends \CPWFreeVendor\Monolog\Handler\Handler imple
     /**
      * {@inheritDoc}
      */
-    public function close() : void
+    public function close(): void
     {
         $this->flushBuffer();
         $this->getHandler()->close();
@@ -148,7 +148,7 @@ class FingersCrossedHandler extends \CPWFreeVendor\Monolog\Handler\Handler imple
     {
         $this->flushBuffer();
         $this->resetProcessors();
-        if ($this->getHandler() instanceof \CPWFreeVendor\Monolog\ResettableInterface) {
+        if ($this->getHandler() instanceof ResettableInterface) {
             $this->getHandler()->reset();
         }
     }
@@ -157,7 +157,7 @@ class FingersCrossedHandler extends \CPWFreeVendor\Monolog\Handler\Handler imple
      *
      * It also resets the handler to its initial buffering state.
      */
-    public function clear() : void
+    public function clear(): void
     {
         $this->buffer = [];
         $this->reset();
@@ -165,15 +165,15 @@ class FingersCrossedHandler extends \CPWFreeVendor\Monolog\Handler\Handler imple
     /**
      * Resets the state of the handler. Stops forwarding records to the wrapped handler.
      */
-    private function flushBuffer() : void
+    private function flushBuffer(): void
     {
         if (null !== $this->passthruLevel) {
             $level = $this->passthruLevel;
-            $this->buffer = \array_filter($this->buffer, function ($record) use($level) {
+            $this->buffer = array_filter($this->buffer, function ($record) use ($level) {
                 return $record['level'] >= $level;
             });
-            if (\count($this->buffer) > 0) {
-                $this->getHandler(\end($this->buffer))->handleBatch($this->buffer);
+            if (count($this->buffer) > 0) {
+                $this->getHandler(end($this->buffer))->handleBatch($this->buffer);
             }
         }
         $this->buffer = [];
@@ -190,9 +190,9 @@ class FingersCrossedHandler extends \CPWFreeVendor\Monolog\Handler\Handler imple
      */
     public function getHandler(?array $record = null)
     {
-        if (!$this->handler instanceof \CPWFreeVendor\Monolog\Handler\HandlerInterface) {
+        if (!$this->handler instanceof HandlerInterface) {
             $this->handler = ($this->handler)($record, $this);
-            if (!$this->handler instanceof \CPWFreeVendor\Monolog\Handler\HandlerInterface) {
+            if (!$this->handler instanceof HandlerInterface) {
                 throw new \RuntimeException("The factory callable should return a HandlerInterface");
             }
         }
@@ -201,24 +201,24 @@ class FingersCrossedHandler extends \CPWFreeVendor\Monolog\Handler\Handler imple
     /**
      * {@inheritDoc}
      */
-    public function setFormatter(\CPWFreeVendor\Monolog\Formatter\FormatterInterface $formatter) : \CPWFreeVendor\Monolog\Handler\HandlerInterface
+    public function setFormatter(FormatterInterface $formatter): HandlerInterface
     {
         $handler = $this->getHandler();
-        if ($handler instanceof \CPWFreeVendor\Monolog\Handler\FormattableHandlerInterface) {
+        if ($handler instanceof FormattableHandlerInterface) {
             $handler->setFormatter($formatter);
             return $this;
         }
-        throw new \UnexpectedValueException('The nested handler of type ' . \get_class($handler) . ' does not support formatters.');
+        throw new \UnexpectedValueException('The nested handler of type ' . get_class($handler) . ' does not support formatters.');
     }
     /**
      * {@inheritDoc}
      */
-    public function getFormatter() : \CPWFreeVendor\Monolog\Formatter\FormatterInterface
+    public function getFormatter(): FormatterInterface
     {
         $handler = $this->getHandler();
-        if ($handler instanceof \CPWFreeVendor\Monolog\Handler\FormattableHandlerInterface) {
+        if ($handler instanceof FormattableHandlerInterface) {
             return $handler->getFormatter();
         }
-        throw new \UnexpectedValueException('The nested handler of type ' . \get_class($handler) . ' does not support formatters.');
+        throw new \UnexpectedValueException('The nested handler of type ' . get_class($handler) . ' does not support formatters.');
     }
 }

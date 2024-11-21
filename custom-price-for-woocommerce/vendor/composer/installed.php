@@ -1,9 +1,9 @@
 <?php return array(
     'root' => array(
         'name' => 'wpdesk/custom-price-for-woocommerce',
-        'pretty_version' => '1.1.10',
-        'version' => '1.1.10.0',
-        'reference' => 'd6737de6d312574be7f4cacfd94b6e17cebaf4a4',
+        'pretty_version' => '1.1.11',
+        'version' => '1.1.11.0',
+        'reference' => '2fb660de8ed30cec2769112e66ede254cb9cc3e1',
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -11,9 +11,9 @@
     ),
     'versions' => array(
         'psr/container' => array(
-            'pretty_version' => '1.1.1',
-            'version' => '1.1.1.0',
-            'reference' => '8622567409010282b7aeebe4bb841fe98b58dcaf',
+            'pretty_version' => '1.1.2',
+            'version' => '1.1.2.0',
+            'reference' => '513e0666f7216c7459170d56df27dfcefe1689ea',
             'type' => 'library',
             'install_path' => __DIR__ . '/../psr/container',
             'aliases' => array(),
@@ -29,9 +29,9 @@
             'dev_requirement' => false,
         ),
         'wpdesk/custom-price-for-woocommerce' => array(
-            'pretty_version' => '1.1.10',
-            'version' => '1.1.10.0',
-            'reference' => 'd6737de6d312574be7f4cacfd94b6e17cebaf4a4',
+            'pretty_version' => '1.1.11',
+            'version' => '1.1.11.0',
+            'reference' => '2fb660de8ed30cec2769112e66ede254cb9cc3e1',
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

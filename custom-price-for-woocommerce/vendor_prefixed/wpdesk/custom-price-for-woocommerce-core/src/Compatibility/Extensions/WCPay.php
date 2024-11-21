@@ -15,14 +15,14 @@ use CPWFreeVendor\WPDesk\Library\CustomPrice\Helper;
 /**
  * The Main WCPay class
  **/
-class WCPay implements \CPWFreeVendor\WPDesk\PluginBuilder\Plugin\Hookable
+class WCPay implements Hookable
 {
     /**
      * WCPay Constructor
      */
     public function hooks()
     {
-        \add_filter('wcpay_payment_request_is_product_supported', [$this, 'hide_request_buttons'], 10, 2);
+        add_filter('wcpay_payment_request_is_product_supported', [$this, 'hide_request_buttons'], 10, 2);
     }
     /**
      * @param bool       $supported
@@ -30,9 +30,9 @@ class WCPay implements \CPWFreeVendor\WPDesk\PluginBuilder\Plugin\Hookable
      *
      * @return  bool
      */
-    public function hide_request_buttons($supported, \WC_Product $product) : bool
+    public function hide_request_buttons($supported, WC_Product $product): bool
     {
-        if (\CPWFreeVendor\WPDesk\Library\CustomPrice\Helper::is_cpw($product) || \CPWFreeVendor\WPDesk\Library\CustomPrice\Helper::has_cpw($product)) {
+        if (Helper::is_cpw($product) || Helper::has_cpw($product)) {
             $supported = \false;
         }
         return (bool) $supported;

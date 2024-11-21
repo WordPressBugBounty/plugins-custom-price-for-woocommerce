@@ -38,7 +38,7 @@ class CoreCompatibility
      */
     private static function get_wc_version()
     {
-        return \defined('WC_VERSION') && \WC_VERSION ? \WC_VERSION : null;
+        return defined('WC_VERSION') && \WC_VERSION ? \WC_VERSION : null;
     }
     /**
      * Returns true if the installed version of WooCommerce is greater than or equal to $version.
@@ -51,7 +51,7 @@ class CoreCompatibility
     public static function is_wc_version_gte($version)
     {
         if (!isset(self::$is_wc_version_gte[$version])) {
-            self::$is_wc_version_gte[$version] = self::get_wc_version() && \version_compare(self::get_wc_version(), $version, '>=');
+            self::$is_wc_version_gte[$version] = self::get_wc_version() && version_compare(self::get_wc_version(), $version, '>=');
         }
         return self::$is_wc_version_gte[$version];
     }
@@ -67,7 +67,7 @@ class CoreCompatibility
         if (self::is_wc_version_gte('3.0.0')) {
             return $product->get_parent_id();
         } else {
-            return $product->is_type('variation') ? \absint($product->get_id) : 0;
+            return $product->is_type('variation') ? absint($product->get_id) : 0;
         }
     }
     /**
@@ -80,7 +80,7 @@ class CoreCompatibility
      */
     public static function get_id($product)
     {
-        if (\is_object($product)) {
+        if (is_object($product)) {
             if (self::is_wc_version_gte('3.0.0')) {
                 $product_id = $product->get_id();
             } else {
@@ -89,7 +89,7 @@ class CoreCompatibility
         } else {
             $product_id = $product;
         }
-        return \absint($product_id);
+        return absint($product_id);
     }
     /**
      * Back-compat wrapper for getting CRUD object props directly.
@@ -105,7 +105,7 @@ class CoreCompatibility
     {
         if (self::is_wc_version_gte('3.0.0')) {
             $get_fn = 'get_' . $name;
-            return \is_callable(array($obj, $get_fn)) ? $obj->{$get_fn}($context) : $obj->get_meta('_' . $name, \true);
+            return is_callable(array($obj, $get_fn)) ? $obj->{$get_fn}($context) : $obj->get_meta('_' . $name, \true);
         } else {
             if ('status' === $name) {
                 $value = isset($obj->post->post_status) ? $obj->post->post_status : null;
@@ -131,7 +131,7 @@ class CoreCompatibility
     {
         if (self::is_wc_version_gte('3.0.0')) {
             $set_fn = 'set_' . $name;
-            if (\is_callable(array($obj, $set_fn))) {
+            if (is_callable(array($obj, $set_fn))) {
                 $obj->{$set_fn}($value);
             } else {
                 $obj->add_meta_data('_' . $name, $value, \true);
@@ -149,6 +149,6 @@ class CoreCompatibility
      */
     public static function get_price_html_from_text($product)
     {
-        return self::is_wc_version_gte('3.0.0') ? \wc_get_price_html_from_text() : $product->get_price_html_from_text();
+        return self::is_wc_version_gte('3.0.0') ? wc_get_price_html_from_text() : $product->get_price_html_from_text();
     }
 }

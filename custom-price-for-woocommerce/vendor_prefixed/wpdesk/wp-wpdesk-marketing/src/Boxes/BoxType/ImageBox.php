@@ -7,7 +7,7 @@
  */
 namespace CPWFreeVendor\WPDesk\Library\Marketing\Boxes\BoxType;
 
-class ImageBox extends \CPWFreeVendor\WPDesk\Library\Marketing\Boxes\BoxType\Box
+class ImageBox extends Box
 {
     const TYPE = 'image';
 }

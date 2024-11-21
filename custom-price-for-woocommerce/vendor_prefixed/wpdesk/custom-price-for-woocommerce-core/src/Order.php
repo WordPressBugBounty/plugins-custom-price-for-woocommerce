@@ -15,11 +15,11 @@ use WC_Order_Item_Product;
 /**
  * Order class.
  */
-class Order implements \CPWFreeVendor\WPDesk\PluginBuilder\Plugin\Hookable
+class Order implements Hookable
 {
     public function hooks()
     {
-        \add_filter('woocommerce_order_again_cart_item_data', [$this, 'order_again_cart_item_data'], 5, 3);
+        add_filter('woocommerce_order_again_cart_item_data', [$this, 'order_again_cart_item_data'], 5, 3);
     }
     /**
      * Add cart session data from existing order.
@@ -35,7 +35,7 @@ class Order implements \CPWFreeVendor\WPDesk\PluginBuilder\Plugin\Hookable
     {
         // Get the product/variation product object of this item.
         $cpw_product = $line_item->get_product();
-        if (\CPWFreeVendor\WPDesk\Library\CustomPrice\Helper::is_cpw($cpw_product)) {
+        if (Helper::is_cpw($cpw_product)) {
             $line_price = $line_item->get_subtotal();
             /**
              * If the order prices include tax then we need to add back the tax on this product.
@@ -50,19 +50,19 @@ class Order implements \CPWFreeVendor\WPDesk\PluginBuilder\Plugin\Hookable
                  * A workaround for rounding issues is to enable tax rounding at the subtotal level via settings
                  * see: https://share.getcloudapp.com/4gux6lve
                  */
-                if ('yes' !== \get_option('woocommerce_tax_round_at_subtotal')) {
-                    $line_price = \wc_format_decimal($line_price, \wc_get_price_decimals());
+                if ('yes' !== get_option('woocommerce_tax_round_at_subtotal')) {
+                    $line_price = wc_format_decimal($line_price, wc_get_price_decimals());
                 }
                 // Use the taxes array items here as they contain taxes to a more accurate number of decimals.
                 $taxes = $line_item->get_taxes();
-                $line_price += \array_sum($taxes['subtotal']);
+                $line_price += array_sum($taxes['subtotal']);
             }
             $line_price = $line_price / $line_item->get_quantity();
-            $cart_item_data['cpw'] = (float) \wc_format_decimal($line_price);
+            $cart_item_data['cpw'] = (float) wc_format_decimal($line_price);
         }
-        if (\CPWFreeVendor\WPDesk\Library\CustomPrice\Helper::is_subscription($cpw_product) && \CPWFreeVendor\WPDesk\Library\CustomPrice\Helper::is_billing_period_variable($cpw_product)) {
+        if (Helper::is_subscription($cpw_product) && Helper::is_billing_period_variable($cpw_product)) {
             $subscription = $this->find_subscription($line_item, $order);
-            if (\is_callable([$subscription, 'get_billing_period'])) {
+            if (is_callable([$subscription, 'get_billing_period'])) {
                 $cart_item_data['cpw_period'] = $subscription->get_billing_period();
             }
         }
