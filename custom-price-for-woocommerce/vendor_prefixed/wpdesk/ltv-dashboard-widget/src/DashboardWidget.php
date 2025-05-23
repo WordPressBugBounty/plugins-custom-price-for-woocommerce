@@ -294,7 +294,7 @@ final class DashboardWidget
                 $add_to_cart_url = $plugin_url;
             } else if ($plugin['add_to_cart_id'] === self::AUTOPAY_ID) {
                 $add_to_cart_button_label = esc_html__('Download', 'custom-price-for-woocommerce');
-                $add_to_cart_url = esc_url("https://wpde.sk/autopay-wpdeskpl");
+                $add_to_cart_url = esc_url("https://wpdesk.link/autopay-wpdeskpl");
             }
             echo '<li class="ltv-row">';
             if ($plugin['image']) {
