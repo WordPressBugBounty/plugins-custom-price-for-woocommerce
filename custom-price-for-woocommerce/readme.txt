@@ -5,7 +5,7 @@ Donate link: https://www.wpdesk.net/products/custom-price-for-woocommerce-pro/
 Tags: custom price, name your price woocommerce, name your price, price on request, call for price
 Requires at least: 5.0
 Tested up to: 6.8
-Stable tag: 1.1.16
+Stable tag: 1.1.17
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -96,6 +96,10 @@ To install the plugin and get it working:
 4. You can enable the custom price in the Product Edit Screen -> Product data section -> General -> Enable the Custom Price checkbox.
 5. For variations, go to the Product Edit Screen -> Product data section -> Variations -> Click on each variation and enable the checkbox.
 
+== Data use policy ==
+
+Learn about [Use of Data Policy by WP Desk Plugins](https://wpdesk.net/terms-conditions/privacy-policy-use-of-data-collected-by-wp-desk-plugins/?utm_source=wporg&utm_medium=link&utm_campaign=data-use-policy)
+
 == Frequently Asked Questions ==
 
 = I want to add a custom price field, can I use it for every product in WooCommerce? =
@@ -175,6 +179,9 @@ Read some articles and see how to use the plugin in your WooCommerce.
 9. Suggest Your Price - Free Plugin
 
 == Changelog ==
+
+= 1.1.17 - 2025-07-17 =
+* Added support for WooCommerce 10.0
 
 = 1.1.16 - 2025-05-23 =
 * Fixed urls
