@@ -23,7 +23,7 @@ class Helper
      *
      * @var array
      */
-    private static $simple_supported_types = ['simple', 'subscription', 'bundle', 'composite', 'variation', 'subscription_variation', 'deposit', 'mix-and-match'];
+    private static $simple_supported_types = ['simple', 'subscription', 'fsb-subscription', 'bundle', 'composite', 'variation', 'subscription_variation', 'deposit', 'mix-and-match'];
     /**
      * Count the number of instance of an NYP input on a given page.
      *
@@ -35,7 +35,7 @@ class Helper
      *
      * @var array
      */
-    private static $variable_supported_types = ['variable', 'variable-subscription'];
+    private static $variable_supported_types = ['variable', 'variable-subscription', 'fsb-varialbe-subscription'];
     /**
      * Get supported "simple" types.
      *
@@ -77,23 +77,6 @@ class Helper
             $wrapper_class = 'form-row-disabled';
         }
         return $wrapper_class;
-    }
-    /**
-     * Verify this is has custom price
-     *
-     * @param mixed int|obj $product
-     *
-     * @return  boolean
-     * @since 1.0
-     */
-    public static function is_cpw($product): bool
-    {
-        $product = self::maybe_get_product_instance($product);
-        if (!$product) {
-            return \false;
-        }
-        $is_cpw = $product->is_type(self::get_simple_supported_types()) && wc_string_to_bool($product->get_meta('_cpw')) ? \true : \false;
-        return (bool) apply_filters('wc_cpw_is_cpw', $is_cpw, $product->get_id(), $product);
     }
     /**
      * Get the suggested price.
@@ -235,11 +218,43 @@ class Helper
         // Filter the raw minimum price @since 1.2.
         return apply_filters('wc_cpw_minimum_billing_period', $period, $product->get_id());
     }
+    public static function product_supports_cpw(\WC_Product $product): bool
+    {
+        return self::is_cpw_product($product) || self::has_cpw_variations($product);
+    }
+    public static function is_cpw_product(\WC_Product $product): bool
+    {
+        $is_cpw = $product->is_type(self::get_simple_supported_types()) && filter_var($product->get_meta('_cpw', \true, 'edit'), \FILTER_VALIDATE_BOOLEAN);
+        return (bool) apply_filters('wc_cpw_is_cpw', $is_cpw, $product->get_id(), $product);
+    }
+    public static function has_cpw_variations(\WC_Product $product): bool
+    {
+        $has_cpw = $product->is_type(self::get_variable_supported_types()) && filter_var($product->get_meta('_has_cpw', \true, 'edit'), \FILTER_VALIDATE_BOOLEAN);
+        return apply_filters('wc_cpw_has_cpw_variations', $has_cpw, $product);
+    }
+    /**
+     * Verify this is has custom price
+     *
+     * @param mixed int|obj $product
+     *
+     * @return  boolean
+     * @since 1.0
+     * @deprecated 1.2.0 Use is_cpw_product()
+     */
+    public static function is_cpw($product): bool
+    {
+        $product = self::maybe_get_product_instance($product);
+        if (!$product) {
+            return \false;
+        }
+        return self::is_cpw_product($product);
+    }
     /**
      * @param mixed obj|int $product
      *
      * @return  boolean
      * @since 1.0.0
+     * @deprecated 1.2.0 Use has_cpw_variations()
      */
     public static function has_cpw($product)
     {
@@ -247,8 +262,7 @@ class Helper
         if (!$product) {
             return \false;
         }
-        $has_cpw = $product->is_type(self::get_variable_supported_types()) && wc_string_to_bool($product->get_meta('_has_cpw', \true, 'edit')) ? \true : \false;
-        return apply_filters('wc_cpw_has_cpw_variations', $has_cpw, $product);
+        return self::has_cpw_variations($product);
     }
     /**
      * @param mixed int|obj $product
@@ -776,7 +790,7 @@ class Helper
                     $price_string = sprintf(__('Due every %s', 'custom-price-for-woocommerce'), $period);
                 }
                 $includes['subscription_period'] = \false;
-            } else if ($minimum && !self::is_minimum_hidden($product)) {
+            } elseif ($minimum && !self::is_minimum_hidden($product)) {
                 $price_string = '';
             } else {
                 $price_string = __('Due', 'custom-price-for-woocommerce');
@@ -801,7 +815,7 @@ class Helper
         // Get product object.
         $product = self::maybe_get_product_instance($product);
         // Parent variable subscriptions don't have a billing period, so we get a array to string notice. therefore only apply to simple subs and sub variations.
-        if ($product && $product->is_type('subscription') || $product->is_type('subscription_variation')) {
+        if ($product && ($product->is_type('subscription') || $product->is_type('subscription_variation'))) {
             if (self::is_billing_period_variable($product)) {
                 // Don't display the subscription price, period or length.
                 $include = ['price' => '', 'subscription_price' => \false, 'subscription_period' => \false];
@@ -936,7 +950,7 @@ class Helper
      */
     public static function increase_counter()
     {
-        self::$counter++;
+        ++self::$counter;
     }
     /**
      * @param int $cpw_id - A product|variation ID.

@@ -15,6 +15,8 @@ use CPWFreeVendor\WPDesk\Library\CustomPrice\Helper;
 use WP_Error;
 /**
  * The Main CoCart class
+ *
+ * TODO: think about integrating into {@see \WPDesk\Library\CustomPrice\Cart} class
  **/
 class CoCart implements Hookable
 {

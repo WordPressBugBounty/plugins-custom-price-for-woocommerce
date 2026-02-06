@@ -1,40 +1,69 @@
 <?php
 
-/**
- * Interact with WooCommerce cart
- *
- * @class    Cart
- * @package  WooCommerce Custom Price/Classes
- * @since  1.0.0
- * @version  3.1.2
- */
 namespace CPWFreeVendor\WPDesk\Library\CustomPrice;
 
 use CPWFreeVendor\WPDesk\PluginBuilder\Plugin\Hookable;
 use WC_Product;
 use Exception;
 use WC_Subscriptions_Product;
-/**
- * Cart class.
- */
 class Cart implements Hookable
 {
+    /**
+     * Holds the custom prices for products in the cart.
+     *
+     * @var array<int, string>
+     */
+    private array $cpw_prices = [];
+    private array $price_filters = ['woocommerce_product_get_price', 'woocommerce_product_get_regular_price', 'woocommerce_product_get_sale_price', 'woocommerce_product_variation_get_price', 'woocommerce_product_variation_get_regular_price', 'woocommerce_product_variation_get_sale_price'];
     public function hooks()
     {
         // Functions for cart actions - ensure they have a priority before addons (10).
         add_filter('woocommerce_is_purchasable', [$this, 'is_purchasable'], 5, 2);
         add_filter('woocommerce_add_cart_item_data', [$this, 'add_cart_item_data'], 5, 3);
         add_filter('woocommerce_get_cart_item_from_session', [$this, 'get_cart_item_from_session'], 11, 2);
-        add_filter('woocommerce_add_cart_item', [$this, 'set_cart_item'], 11, 1);
+        add_filter('woocommerce_cart_loaded_from_session', [$this, 'modify_product_data_in_memory'], 11, 1);
         add_filter('woocommerce_add_to_cart_validation', [$this, 'validate_add_cart_item'], 5, 6);
         // Re-validate prices in cart.
         add_action('woocommerce_check_cart_items', [$this, 'check_cart_items']);
+        // Hook early into the cart calculations to modify prices with customer's custom values.
+        add_action('woocommerce_before_calculate_totals', [$this, 'add_calculation_price_filter'], 0);
+        add_action('woocommerce_calculate_totals', [$this, 'remove_calculation_price_filter'], 0);
+        add_action('woocommerce_after_calculate_totals', [$this, 'remove_calculation_price_filter'], 0);
+    }
+    public function add_calculation_price_filter(): void
+    {
+        // First, prepare the product objects in the cart
+        foreach (WC()->cart->get_cart() as $cart_item_key => $cart_item) {
+            if (isset($cart_item['cpw']) && $cart_item['data'] instanceof \WC_Product) {
+                $this->cpw_prices[$cart_item['data']->get_id()] = $cart_item['cpw'];
+            }
+        }
+        if (count($this->cpw_prices) === 0) {
+            return;
+        }
+        foreach ($this->price_filters as $filter) {
+            add_filter($filter, [$this, 'set_cpw_price_for_product'], 20, 2);
+        }
+    }
+    public function remove_calculation_price_filter(): void
+    {
+        foreach ($this->price_filters as $filter) {
+            remove_filter($filter, [$this, 'set_cpw_price_for_product'], 20);
+        }
     }
     /**
-     * ---------------------------------------------------------------------------------
-     * Cart Filters
-     * ---------------------------------------------------------------------------------
+     * @param float $price
+     * @param \WC_Product $product
+     *
+     * @return float
      */
+    public function set_cpw_price_for_product($price, $product)
+    {
+        if (isset($this->cpw_prices[$product->get_id()])) {
+            return $this->cpw_prices[$product->get_id()];
+        }
+        return $price;
+    }
     /**
      * Override woo's is_purchasable in cases of cpw products.
      *
@@ -46,7 +75,7 @@ class Cart implements Hookable
      */
     public function is_purchasable(bool $is_purchasable, WC_Product $product): bool
     {
-        if (!Helper::is_cpw($product) && !Helper::has_cpw($product)) {
+        if (!Helper::product_supports_cpw($product)) {
             return $is_purchasable;
         }
         /*
@@ -65,30 +94,6 @@ class Cart implements Hookable
         return \true;
     }
     /**
-     * Redirect to the cart when editing a price "in-cart".
-     *
-     * @param string $url
-     *
-     * @return string
-     * @since 1.0.0
-     */
-    public function edit_in_cart_redirect(string $url): string
-    {
-        return wc_get_cart_url();
-    }
-    /**
-     * Filter the displayed notice after redirecting to the cart when editing a price "in-cart".
-     *
-     * @param $message
-     *
-     * @return string
-     * @since 1.0.0
-     */
-    public function edit_in_cart_redirect_message($message): string
-    {
-        return __('Cart updated.', 'custom-price-for-woocommerce');
-    }
-    /**
      * Add cart session data.
      *
      * @param array $cart_item_data extra cart item data we want to pass into the item.
@@ -99,8 +104,7 @@ class Cart implements Hookable
      */
     public function add_cart_item_data(array $cart_item_data, $product_id, $variation_id): array
     {
-        // phpcs:disable WordPress.Security.NonceVerification
-        // phpcs:enable
+        // TODO: redirecting should be separated from setting cart item data. And we need to stress somewhere that we DO want to save the price in cart session (for easy restore, etc)
         if (!is_scalar($product_id) || !is_scalar($variation_id)) {
             return $cart_item_data;
         }
@@ -115,15 +119,14 @@ class Cart implements Hookable
         // Is this an NYP item?
         if (Helper::is_cpw($cpw_id) && $posted_price) {
             // Updating container in cart?
-            if (isset($_POST['update-price']) && isset($_POST['_cpwnonce']) && wp_verify_nonce(sanitize_key($_POST['_cpwnonce']), 'cpw-nonce')) {
+            if (isset($_POST['update-price'], $_POST['_cpwnonce']) && wp_verify_nonce(sanitize_key($_POST['_cpwnonce']), 'cpw-nonce')) {
                 $updating_cart_key = wc_clean(wp_unslash($_POST['update-price']));
                 if (WC()->cart->find_product_in_cart($updating_cart_key)) {
                     // Remove.
                     WC()->cart->remove_cart_item($updating_cart_key);
-                    // Redirect to cart.
-                    add_filter('woocommerce_add_to_cart_redirect', [$this, 'edit_in_cart_redirect']);
-                    // Edit notice.
-                    add_filter('wc_add_to_cart_message_html', [$this, 'edit_in_cart_redirect_message']);
+                    // Redirect to cart and edit notice.
+                    add_filter('woocommerce_add_to_cart_redirect', fn() => wc_get_cart_url());
+                    add_filter('wc_add_to_cart_message_html', fn() => __('Cart updated.', 'custom-price-for-woocommerce'));
                 }
             }
             // No need to check is_cpw b/c this has already been validated by validate_add_cart_item().
@@ -153,34 +156,35 @@ class Cart implements Hookable
             if (Helper::is_subscription($cart_item['data']) && isset($values['cpw_period']) && array_key_exists($values['cpw_period'], Helper::get_subscription_period_strings())) {
                 $cart_item['cpw_period'] = $values['cpw_period'];
             }
-            $cart_item = $this->set_cart_item($cart_item);
         }
         return $cart_item;
     }
     /**
-     * Change the price of the item in the cart.
+     * We have cart object with custom prices submitted by the user. To fully reflect that in the
+     * UI, i.e. displayed price of the product, we need to temporarily modify product
+     * values. This only works for product objects that are in the cart. Under no circumstances
+     * this method can call `\WC_Product::save()`, persisting the changes!
      *
-     * @param array $cart_item
-     *
-     * @return  array
-     * @since 1.0.0
+     * @param \WC_Cart $cart
      */
-    public function set_cart_item(array $cart_item): array
+    public function modify_product_data_in_memory($cart)
     {
-        // Adjust price in cart if cpw is set.
-        if (isset($cart_item['cpw']) && isset($cart_item['data'])) {
+        foreach ($cart->get_cart() as $cart_item) {
+            if (!isset($cart_item['cpw'], $cart_item['data'])) {
+                continue;
+            }
             $product = $cart_item['data'];
+            $product->set_regular_price($cart_item['cpw']);
             $product->set_price($cart_item['cpw']);
             $product->set_sale_price($cart_item['cpw']);
-            $product->set_regular_price($cart_item['cpw']);
             // Subscription-specific price and variable billing period.
             if ($product->is_type(['subscription', 'subscription_variation'])) {
                 $product->update_meta_data('_subscription_price', $cart_item['cpw']);
                 if (Helper::is_billing_period_variable($product) && isset($cart_item['cpw_period'])) {
                     // Length may need to be re-calculated. Hopefully no one is using the length but who knows.
                     // v3.1.3 disables the length selector when in variable billing mode.
-                    $original_period = WC_Subscriptions_Product::get_period($product);
-                    $original_length = WC_Subscriptions_Product::get_length($product);
+                    $original_period = \WC_Subscriptions_Product::get_period($product);
+                    $original_length = \WC_Subscriptions_Product::get_length($product);
                     if ($original_length > 0 && $original_period && $cart_item['cpw_period'] !== $original_period) {
                         $factors = Helper::annual_price_factors();
                         $new_length = $original_length * $factors[$cart_item['cpw_period']] / $factors[$original_period];
@@ -193,7 +197,6 @@ class Cart implements Hookable
                 }
             }
         }
-        return $cart_item;
     }
     /**
      * Validate an NYP product before adding to cart.
@@ -206,15 +209,13 @@ class Cart implements Hookable
      * @param array  $cart_item_data - Extra cart item data we want to pass into the item.
      *
      * @return bool
-     * @throws Exception
      * @since 1.0
      */
     public function validate_add_cart_item($passed, int $product_id, int $quantity, $variation_id = '', $variations = '', $cart_item_data = [])
     {
         $cpw_id = $variation_id ? $variation_id : $product_id;
         $product = wc_get_product($cpw_id);
-        // Skip if not a NYP product - send original status back.
-        if (!Helper::is_cpw($product)) {
+        if (!Helper::product_supports_cpw($product)) {
             return $passed;
         }
         $suffix = Helper::get_suffix($cpw_id);
@@ -230,7 +231,7 @@ class Cart implements Hookable
      */
     public function check_cart_items()
     {
-        foreach (WC()->cart->cart_contents as $cart_item_key => $cart_item) {
+        foreach (WC()->cart->cart_contents as $cart_item) {
             if (isset($cart_item['cpw'])) {
                 $period = isset($cart_item['cpw_period']) ? $cart_item['cpw_period'] : '';
                 $this->validate_price($cart_item['data'], $cart_item['quantity'], $cart_item['cpw'], $period, 'cart');
@@ -238,87 +239,99 @@ class Cart implements Hookable
         }
     }
     /**
-     * Validate an NYP product's price is valid.
+     * Validates the product price
      *
-     * @param mixed  $product
-     * @param int    $quantity
-     * @param string $price
-     * @param string $period
-     * @param string $context
-     * @param bool   $return_error - When true returns the string error message.
+     * @param WC_Product|int $product      The product or product ID.
+     * @param int            $quantity     The quantity.
+     * @param string         $price        The price to validate.
+     * @param string         $period       The billing period for subscriptions.
+     * @param string         $context      The context of the validation (e.g., 'add-to-cart').
+     * @param bool           $return_error If true, returns the error message string instead of adding a WC notice.
      *
-     * @return boolean|string
-     * @throws Exception When the entered price is not valid
-     * @since 1.0.0
+     * @return ($return_error is true ? string : bool) True on success, false or an error string on failure.
      */
     public function validate_price($product, $quantity, string $price, $period = '', $context = 'add-to-cart', $return_error = \false)
     {
-        $is_configuration_valid = \true;
-        try {
-            // Sanity check.
-            $product = Helper::maybe_get_product_instance($product);
-            if (!$product instanceof WC_Product) {
-                $notice = Helper::error_message('invalid-product');
-                throw new Exception($notice);
-            }
-            $product_id = $product->get_id();
-            $product_title = $product->get_title();
-            // Get minimum price.
-            $minimum = Helper::get_minimum_price($product);
-            // Get maximum price.
-            $maximum = Helper::get_maximum_price($product);
-            // Minimum error template.
-            $error_template = Helper::is_minimum_hidden($product) ? 'hide_minimum' : 'minimum';
-            // Check that it is a positive numeric value.
-            if (!is_numeric($price) || is_infinite($price) || floatval($price) < 0) {
-                $notice = Helper::error_message('invalid', ['%%TITLE%%' => $product_title], $product, $context);
-                throw new Exception($notice);
-                // Check that it is greater than minimum price for variable billing subscriptions.
-            } elseif ($minimum && $period && Helper::is_subscription($product) && Helper::is_billing_period_variable($product)) {
-                // Minimum billing period.
-                $minimum_period = Helper::get_minimum_billing_period($product);
-                // Annual minimum.
-                $minimum_annual = Helper::annualize_price($minimum, $minimum_period);
-                // Annual price.
-                $annual_price = Helper::annualize_price($price, $period);
-                // By standardizing the prices over the course of a year we can safely compare them.
-                if ($annual_price < $minimum_annual) {
-                    $factors = Helper::annual_price_factors();
-                    // If set period is in the $factors array we can calc the min price shown in the error according to entered period.
-                    if (isset($factors[$period])) {
-                        $error_price = $minimum_annual / $factors[$period];
-                        $error_period = $period;
-                        // Otherwise, just show the saved minimum price and period.
-                    } else {
-                        $error_price = $minimum;
-                        $error_period = $minimum_period;
-                    }
-                    // The minimum is a combo of price and period.
-                    $minimum_error = wc_price($error_price) . ' / ' . $error_period;
-                    $notice = Helper::error_message($error_template, ['%%TITLE%%' => $product_title, '%%MINIMUM%%' => $minimum_error], $product, $context);
-                    throw new Exception($notice);
-                }
-                // Check that it is greater than minimum price.
-            } elseif ($minimum && floatval($price) < floatval($minimum)) {
-                $notice = Helper::error_message($error_template, ['%%TITLE%%' => $product_title, '%%MINIMUM%%' => wc_price($minimum)], $product, $context);
-                throw new Exception($notice);
-                // Check that it is less than maximum price.
-            } elseif ($maximum && floatval($price) > floatval($maximum)) {
-                $error_template = '' !== $context ? 'maximum-' . $context : 'maximum';
-                $notice = Helper::error_message('error_template', ['%%TITLE%%' => $product_title, '%%MAXIMUM%%' => wc_price($maximum)], $product, $context);
-                throw new Exception($notice);
-            }
-        } catch (Exception $e) {
-            $notice = $e->getMessage();
-            if ($notice) {
-                if ($return_error) {
-                    return $notice;
-                }
-                wc_add_notice($notice, 'error');
-            }
-            $is_configuration_valid = \false;
-        } finally {
-            return $is_configuration_valid;
+        $product = Helper::maybe_get_product_instance($product);
+        if (!$product instanceof WC_Product) {
+            $notice = Helper::error_message('invalid-product');
+            return $this->handle_validation_error($notice, $return_error);
         }
+        $product_title = $product->get_title();
+        $minimum = Helper::get_minimum_price($product);
+        $maximum = Helper::get_maximum_price($product);
+        if (!is_numeric($price) || is_infinite($price) || floatval($price) < 0) {
+            $notice = Helper::error_message('invalid', ['%%TITLE%%' => $product_title], $product, $context);
+            return $this->handle_validation_error($notice, $return_error);
+        }
+        if ($minimum && $period && Helper::is_subscription($product) && Helper::is_billing_period_variable($product)) {
+            $notice = $this->validate_subscription_price($product, $price, $period, $minimum, $product_title, $context);
+            if ($notice) {
+                return $this->handle_validation_error($notice, $return_error);
+            }
+            // If the subscription price is valid, we skip the other checks
+            return \true;
+        }
+        if ($minimum && floatval($price) < floatval($minimum)) {
+            $error_template = Helper::is_minimum_hidden($product) ? 'hide_minimum' : 'minimum';
+            $notice = Helper::error_message($error_template, ['%%TITLE%%' => $product_title, '%%MINIMUM%%' => wc_price($minimum)], $product, $context);
+            return $this->handle_validation_error($notice, $return_error);
+        }
+        if ($maximum && floatval($price) > floatval($maximum)) {
+            $error_template = '' !== $context ? 'maximum-' . $context : 'maximum';
+            $notice = Helper::error_message($error_template, ['%%TITLE%%' => $product_title, '%%MAXIMUM%%' => wc_price($maximum)], $product, $context);
+            return $this->handle_validation_error($notice, $return_error);
+        }
+        return \true;
+    }
+    /**
+     * Helper method to validate variable billing subscription price.
+     *
+     * @return string|null The error message on failure, or null on success.
+     */
+    private function validate_subscription_price($product, string $price, string $period, $minimum, string $product_title, string $context): ?string
+    {
+        // Annualize prices to safely compare them.
+        $minimum_period = Helper::get_minimum_billing_period($product);
+        $minimum_annual = Helper::annualize_price($minimum, $minimum_period);
+        $annual_price = Helper::annualize_price($price, $period);
+        // If the annualized entered price is less than the minimum, it's an error.
+        if ($annual_price < $minimum_annual) {
+            $factors = Helper::annual_price_factors();
+            // Calculate the minimum price for the user-entered period for a clearer error message.
+            if (isset($factors[$period])) {
+                $error_price = $minimum_annual / $factors[$period];
+                $error_period = $period;
+            } else {
+                // Fallback to the saved minimum price and period.
+                $error_price = $minimum;
+                $error_period = $minimum_period;
+            }
+            $minimum_error = wc_price($error_price) . ' / ' . $error_period;
+            $error_template = Helper::is_minimum_hidden($product) ? 'hide_minimum' : 'minimum';
+            return Helper::error_message($error_template, ['%%TITLE%%' => $product_title, '%%MINIMUM%%' => $minimum_error], $product, $context);
+        }
+        return null;
+        // Price is valid.
+    }
+    /**
+     * Helper method to handle the result of a validation failure.
+     *
+     * It either returns the error string or adds a WooCommerce notice and returns false,
+     * centralizing the logic from the original catch block.
+     *
+     * @param string $notice       The error message.
+     * @param bool   $return_error If true, return the notice string.
+     * @return string|false
+     */
+    private function handle_validation_error(string $notice, bool $return_error)
+    {
+        if ($return_error) {
+            return $notice;
+        }
+        if ($notice) {
+            wc_add_notice($notice, 'error');
+        }
+        return \false;
     }
 }

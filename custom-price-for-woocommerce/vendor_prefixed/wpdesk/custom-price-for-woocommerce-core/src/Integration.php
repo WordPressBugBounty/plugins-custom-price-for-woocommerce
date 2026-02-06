@@ -55,14 +55,14 @@ class Integration implements Hookable
      */
     final protected function get_library_url(): string
     {
-        return trailingslashit(plugin_dir_url(dirname(__FILE__)));
+        return trailingslashit(plugin_dir_url(__DIR__));
     }
     /**
      * @return string
      */
     final protected function get_library_path(): string
     {
-        return trailingslashit(plugin_dir_path(dirname(__FILE__)));
+        return trailingslashit(plugin_dir_path(__DIR__));
     }
     /**
      * @return Renderer

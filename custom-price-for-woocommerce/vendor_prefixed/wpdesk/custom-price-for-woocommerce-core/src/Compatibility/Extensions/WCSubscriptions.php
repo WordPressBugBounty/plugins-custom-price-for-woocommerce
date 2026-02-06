@@ -52,7 +52,7 @@ class WCSubscriptions implements Hookable
      *
      * @param bool $is_switchable
      * @param WC_Product
-     * @param mixed null|WC_Product_Variation
+     * @param null|WC_Product_Variation
      *
      * @return bool
      */

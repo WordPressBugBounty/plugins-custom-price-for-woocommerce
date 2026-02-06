@@ -1,11 +1,11 @@
 === Custom Price for WooCommerce ===
 
 Contributors: wpdesk,piotrpo,marcinkolanko
-Donate link: https://www.wpdesk.net/products/custom-price-for-woocommerce-pro/
+Donate link: https://www.wpdesk.net/sk/custom-price-for-woocommerce-rm-donate/
 Tags: custom price, name your price woocommerce, name your price, price on request, call for price
 Requires at least: 5.0
-Tested up to: 6.8
-Stable tag: 1.1.17
+Tested up to: 6.9
+Stable tag: 1.1.22
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -55,11 +55,11 @@ You may also use additional features of the Custom Price for WooCommerce PRO! Le
 * <strong>PRO</strong> Hide Minimum and Maximum Price,
 * <strong>PRO</strong> Add to Cart Button Text.
 
-If you need such options, [**upgrade to PRO now &rarr;**](https://www.wpdesk.net/products/custom-price-for-woocommerce-pro/?utm_source=wordpress-org&utm_medium=link&utm_campaign=custom-price)
+If you need such options, [**upgrade to PRO now &rarr;**](https://www.wpdesk.net/sk/custom-price-for-woocommerce-rm-pro)
 
 == Premium Live Demo ==
 
-You may test Custom Price for WooCommerce (free and PRO) and all of our plugins in [**your free demo**](https://demo.wpdesk.org/).
+You may test Custom Price for WooCommerce (free and PRO) and all of our plugins in [**your free demo**](https://wpdesk.link/custom-price-for-woocommerce-rm-demo).
 
 == Languages ==
 
@@ -72,7 +72,7 @@ You may help us [translate the plugin](https://translate.wordpress.org/projects/
 
 == Documentation ==
 
-Please visit the **[official documentation of Custom Price for WooCommerce](http://wpdesk.net/docs/docs-custom-price-for-woocommerce/)** to learn more about the plugin's features and settings.
+Please visit the **[official documentation of Custom Price for WooCommerce](http://wpdesk.net/sk/custom-price-for-woocommerce-rm-docs/)** to learn more about the plugin's features and settings.
 
 == Roadmap ==
 
@@ -84,7 +84,7 @@ In the future, we plan to add the following features to the plugin to make it mo
 * Customizable notice after adding the product to the cart,
 * Change the default position of the price field.
 
-If you have questions, feature requests, or any interesting ideas - [let us know!](https://www.wpdesk.net/get-support/?subject=Pre-sale) 🙂
+If you have questions, feature requests, or any interesting ideas - [let us know!](https://www.wpdesk.net/sk/custom-price-for-woocommerce-rm-support) 🙂
 
 == Installation ==
 
@@ -98,7 +98,7 @@ To install the plugin and get it working:
 
 == Data use policy ==
 
-Learn about [Use of Data Policy by WP Desk Plugins](https://wpdesk.net/terms-conditions/privacy-policy-use-of-data-collected-by-wp-desk-plugins/?utm_source=wporg&utm_medium=link&utm_campaign=data-use-policy)
+Learn about [Use of Data Policy by WP Desk Plugins](https://wpdesk.net/sk/custom-price-for-woocommerce-rm-policy)
 
 == Frequently Asked Questions ==
 
@@ -136,15 +136,19 @@ You may let your customers name a price of PDF vouchers and gift cards as well. 
 
 = How to configure the plugin? =
 
-We have prepared for you the step-by-step guide in the [documentation](http://wpdesk.net/docs/docs-custom-price-for-woocommerce).
+We have prepared for you the step-by-step guide in the [documentation](http://wpdesk.net/sk/custom-price-for-woocommerce-rm-docs-conf).
 
 = Do you offer support? =
 
 We provide limited support for the free version on the plugin's [Support Forum](https://wordpress.org/support/plugin/flexible-coupons).
 
-In the PRO version, you get the priority e-mail support as well as all PRO features. [Upgrade Now &rarr;](https://www.wpdesk.net/products/custom-price-for-woocommerce-pro/?utm_source=wordpress-org&utm_medium=link&utm_campaign=custom-price)
+In the PRO version, you get the priority e-mail support as well as all PRO features. [Upgrade Now &rarr;](https://www.wpdesk.net/sk/custom-price-for-woocommerce-rm-pro)
 
-Yes. You can test the plugin in your [free demo](https://demo.wpdesk.org/).
+Yes. You can test the plugin in your [free demo](https://wpdesk.link/custom-price-for-woocommerce-rm-demo).
+
+= Where do I report security bugs found in this plugin? =
+
+Please report security bugs found in the source code of the Custom Price for WooCommerce plugin through the [Patchstack Vulnerability Disclosure Program](https://patchstack.com/database/vdp/b13739ec-f859-431d-9d2a-33624f5985f3). The Patchstack team will assist you with verification, CVE assignment, and notify the developers of this plugin.
 
 = How does the pay bill form can work? =
 
@@ -161,10 +165,10 @@ Issue invoices using the [Flexible Invoices WooCommerce and WordPress &rarr;](ht
 = Where can I read more about the plugin? =
 
 Read some articles and see how to use the plugin in your WooCommerce.
-* [How to enable custom price calculation in WooCommerce product?](https://www.wpdesk.net/blog/how-to-enable-custom-price-calculation-in-woocommerce-product/)
-* [Custom price based on user input in WooCommerce](https://www.wpdesk.net/blog/custom-price-based-on-user-input-in-woocommerce/)
-* [Give your website visitors the option to enter a donation amount](https://www.wpdesk.net/blog/add-product-to-cart-with-custom-price/)
-* [The Documentation of the plugin](https://www.wpdesk.net/docs/docs-custom-price-for-woocommerce/)
+* [How to enable custom price calculation in WooCommerce product?](https://www.wpdesk.net/sk/custom-price-for-woocommerce-rm-docs-enable/)
+* [Custom price based on user input in WooCommerce](https://www.wpdesk.net/sk/custom-price-for-woocommerce-rm-docs-price-input/)
+* [Give your website visitors the option to enter a donation amount](https://www.wpdesk.net/sk/custom-price-for-woocommerce-rm-docs-add-to-cart/)
+* [The Documentation of the plugin](https://www.wpdesk.net/sk/custom-price-for-woocommerce-rm-docs-conf/)
 
 == Screenshots ==
 
@@ -179,6 +183,25 @@ Read some articles and see how to use the plugin in your WooCommerce.
 9. Suggest Your Price - Free Plugin
 
 == Changelog ==
+
+= 1.1.22 - 2026-01-20 =
+* Added support for WooCommerce 10.5
+* Fixed php 8.4 deprecation warnings
+
+= 1.1.21 - 2025-12-03 =
+* Added support for WordPress 6.9
+* Added support for WooCommerce 10.4
+
+= 1.1.20 - 2025-10-21 =
+* Changed plugin links
+
+= 1.1.19 - 2025-10-13 =
+* Added support for WooCommerce 10.3
+* Added Patchstack Vulnerability Disclosure Program
+
+= 1.1.18 - 2025-10-02 =
+* Improved compatibility with Flexible Subscriptions.
+* Added support for WooCommerce 10.2
 
 = 1.1.17 - 2025-07-17 =
 * Added support for WooCommerce 10.0

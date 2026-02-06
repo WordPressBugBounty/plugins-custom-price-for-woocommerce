@@ -30,6 +30,7 @@
 
 				switch ( true ) {
 					case 'subscription' === product_type:
+					case 'fsb-subscription' === product_type:
 						$.showHideNYPprices( is_cpw, true );
 						checkbox_cpw.show();
 						$.showHideSugesstedPrice();
@@ -40,6 +41,7 @@
 						$.enableDisableSubscriptionLength( is_cpw && is_variable_billing );
 						break;
 					case 'variable-subscription' === product_type:
+					case 'fsb-variable-subscription' === product_type:
 						$.showHideNYPprices( false );
 						checkbox_cpw.show();
 						$.moveNYPvariationFields();
@@ -127,7 +129,7 @@
 				);
 			},
 			showHideNYPvariableMeta: function () {
-				if ( 'variable-subscription' === $( '#product-type' ).val() ) {
+				if ( 'variable-subscription' === $( '#product-type' ).val() || 'fsb-variable-subscription' === $( '#product-type' ) ) {
 					$.showHideNYPmetaforVariableSubscriptions();
 				} else {
 					$.showHideNYPmetaforVariableProducts();

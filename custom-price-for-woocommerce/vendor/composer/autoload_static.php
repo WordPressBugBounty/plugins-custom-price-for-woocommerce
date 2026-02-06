@@ -4,14 +4,14 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitbe71f49b89171988f8f22cd738ba0662
+class ComposerStaticInit110e6981f4629c4147315dff8325935d
 {
     public static $prefixLengthsPsr4 = array (
-        'W' => 
+        'W' =>
         array (
             'WPDesk\\WPDeskCPWFree\\' => 21,
         ),
-        'P' => 
+        'P' =>
         array (
             'Psr\\Log\\' => 8,
             'Psr\\Container\\' => 14,
@@ -19,15 +19,15 @@ class ComposerStaticInitbe71f49b89171988f8f22cd738ba0662
     );
 
     public static $prefixDirsPsr4 = array (
-        'WPDesk\\WPDeskCPWFree\\' => 
+        'WPDesk\\WPDeskCPWFree\\' =>
         array (
             0 => __DIR__ . '/../..' . '/src',
         ),
-        'Psr\\Log\\' => 
+        'Psr\\Log\\' =>
         array (
             0 => __DIR__ . '/..' . '/psr/log/Psr/Log',
         ),
-        'Psr\\Container\\' => 
+        'Psr\\Container\\' =>
         array (
             0 => __DIR__ . '/..' . '/psr/container/src',
         ),
@@ -149,7 +149,6 @@ class ComposerStaticInitbe71f49b89171988f8f22cd738ba0662
         'CPWFreeVendor\\Monolog\\SignalHandler' => __DIR__ . '/../..' . '/vendor_prefixed/monolog/monolog/src/Monolog/SignalHandler.php',
         'CPWFreeVendor\\Monolog\\Test\\TestCase' => __DIR__ . '/../..' . '/vendor_prefixed/monolog/monolog/src/Monolog/Test/TestCase.php',
         'CPWFreeVendor\\Monolog\\Utils' => __DIR__ . '/../..' . '/vendor_prefixed/monolog/monolog/src/Monolog/Utils.php',
-        'CPWFreeVendor\\Psr\\Clock\\ClockInterface' => __DIR__ . '/../..' . '/vendor_prefixed/psr/clock/src/ClockInterface.php',
         'CPWFreeVendor\\Psr\\Container\\ContainerExceptionInterface' => __DIR__ . '/../..' . '/vendor_prefixed/psr/container/src/ContainerExceptionInterface.php',
         'CPWFreeVendor\\Psr\\Container\\ContainerInterface' => __DIR__ . '/../..' . '/vendor_prefixed/psr/container/src/ContainerInterface.php',
         'CPWFreeVendor\\Psr\\Container\\NotFoundExceptionInterface' => __DIR__ . '/../..' . '/vendor_prefixed/psr/container/src/NotFoundExceptionInterface.php',
@@ -184,9 +183,6 @@ class ComposerStaticInitbe71f49b89171988f8f22cd738ba0662
         'CPWFreeVendor\\Psr\\Log\\Test\\DummyTest' => __DIR__ . '/../..' . '/vendor_prefixed/psr/log/Psr/Log/Test/DummyTest.php',
         'CPWFreeVendor\\Psr\\Log\\Test\\LoggerInterfaceTest' => __DIR__ . '/../..' . '/vendor_prefixed/psr/log/Psr/Log/Test/LoggerInterfaceTest.php',
         'CPWFreeVendor\\Psr\\Log\\Test\\TestLogger' => __DIR__ . '/../..' . '/vendor_prefixed/psr/log/Psr/Log/Test/TestLogger.php',
-        'CPWFreeVendor\\Psr\\SimpleCache\\CacheException' => __DIR__ . '/../..' . '/vendor_prefixed/psr/simple-cache/src/CacheException.php',
-        'CPWFreeVendor\\Psr\\SimpleCache\\CacheInterface' => __DIR__ . '/../..' . '/vendor_prefixed/psr/simple-cache/src/CacheInterface.php',
-        'CPWFreeVendor\\Psr\\SimpleCache\\InvalidArgumentException' => __DIR__ . '/../..' . '/vendor_prefixed/psr/simple-cache/src/InvalidArgumentException.php',
         'CPWFreeVendor\\WPDesk\\Dashboard\\DashboardWidget' => __DIR__ . '/../..' . '/vendor_prefixed/wpdesk/ltv-dashboard-widget/src/DashboardWidget.php',
         'CPWFreeVendor\\WPDesk\\Library\\CustomPrice\\Admin\\Admin' => __DIR__ . '/../..' . '/vendor_prefixed/wpdesk/custom-price-for-woocommerce-core/src/Admin/Admin.php',
         'CPWFreeVendor\\WPDesk\\Library\\CustomPrice\\Admin\\Install' => __DIR__ . '/../..' . '/vendor_prefixed/wpdesk/custom-price-for-woocommerce-core/src/Admin/Install.php',
@@ -359,9 +355,9 @@ class ComposerStaticInitbe71f49b89171988f8f22cd738ba0662
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitbe71f49b89171988f8f22cd738ba0662::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitbe71f49b89171988f8f22cd738ba0662::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitbe71f49b89171988f8f22cd738ba0662::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit110e6981f4629c4147315dff8325935d::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit110e6981f4629c4147315dff8325935d::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit110e6981f4629c4147315dff8325935d::$classMap;
 
         }, null, ClassLoader::class);
     }

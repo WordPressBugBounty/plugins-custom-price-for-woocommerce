@@ -31,7 +31,7 @@ class ProductFields implements Hookable
         ?>
 		<label>
 			<input type="checkbox" class="checkbox variation_is_cpw"
-				   name="variation_is_cpw[<?php 
+					name="variation_is_cpw[<?php 
         echo esc_attr($loop);
         ?>]" <?php 
         checked($variation_is_cpw, 'yes');
@@ -111,7 +111,7 @@ class ProductFields implements Hookable
         $field_value = sanitize_text_field($product_object->get_meta('_price_label', \true));
         $option_value = get_option('woocommerce_cpw_label_text', esc_html__('Price', 'custom-price-for-woocommerce'));
         woocommerce_wp_text_input(['id' => is_int($loop) ? "variation_price_label[{$loop}]" : '_price_label', 'class' => 'short', 'wrapper_class' => is_int($loop) ? 'form-row form-row-full' : '', 'label' => __('Price Label', 'custom-price-for-woocommerce'), 'desc_tip' => 'true', 'description' => __('Label for input price.', 'custom-price-for-woocommerce'), 'data_type' => '', 'value' => !empty($field_value) ? $field_value : $option_value]);
-        $buy_pro_url = get_locale() === 'pl_PL' ? 'https://www.wpdesk.pl/sklep/wlasna-cena-produktu-woocommerce-pro/?utm_source=wp-admin-plugins&utm_medium=link&utm_campaign=custom-price-pro&utm_content=edit-product' : 'https://wpdesk.net/products/custom-price-for-woocommerce-pro/?utm_source=wp-admin-plugins&utm_medium=link&utm_campaign=custom-price-pro&utm_content=edit-product';
+        $buy_pro_url = get_locale() === 'pl_PL' ? 'https://www.wpdesk.pl/sk/custom-price-for-woocommerce-core-go-pro-pl' : 'https://wpdesk.net/sk/custom-price-for-woocommerce-core-go-pro-en';
         if (!Integration::is_super()) {
             printf(
                 // translators: Upgrade to PRO link.

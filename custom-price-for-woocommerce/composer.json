@@ -45,6 +45,7 @@
 		"wp-coding-standards/wpcs": "^2.3",
 		"wpdesk/custom-price-for-woocommerce-core": "^1.1.0",
 		"wpdesk/ltv-dashboard-widget": "^1",
+		"wpdesk/wp-code-sniffer": "^1.2",
 		"wpdesk/wp-codeception": "^2",
 		"wpdesk/wp-logs": "^1.7",
 		"wpdesk/wp-plugin-flow-free": "*",
@@ -81,5 +82,7 @@
 			"type": "composer",
 			"url": "https://gitlab.wpdesk.dev/api/v4/group/wpdesk/-/packages/composer/"
 		}
-	}
+	},
+	"version": "1.1.22",
+	"type": "wordpress-plugin"
 }

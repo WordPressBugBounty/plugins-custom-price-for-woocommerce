@@ -32,7 +32,8 @@ class Plugin extends AbstractPlugin implements HookableCollection, Activateable 
 		parent::__construct( $this->plugin_info );
 
 		$this->settings_url = admin_url( 'admin.php?page=wc-settings&tab=custom_price' );
-		$this->docs_url     = get_locale() === 'pl_PL' ? 'https://www.wpdesk.pl/docs/wlasna-cena-produktu-woocommerce' : 'https://www.wpdesk.net/docs/docs-custom-price-for-woocommerce';
+		$this->docs_url     = get_locale() === 'pl_PL' ? 'https://www.wpdesk.pl/sk/custom-price-for-woocommerce-docs-pl' : 'https://www.wpdesk.net/sk/custom-price-for-woocommerce-docs-en';
+		$this->support_url  = get_locale() === 'pl_PL' ? 'https://www.wpdesk.pl/sk/custom-price-for-woocommerce-support-pl' : 'https://www.wpdesk.net/sk/custom-price-for-woocommerce-support-en';
 	}
 
 	/**
@@ -69,7 +70,7 @@ class Plugin extends AbstractPlugin implements HookableCollection, Activateable 
 		// first link
 		array_unshift( $links, $start_here_link );
 
-		$upgrade_url = \get_locale() === 'pl_PL' ? 'https://www.wpdesk.pl/sklep/wlasna-cena-produktu-woocommerce-pro/?utm_source=wp-admin-plugins&utm_medium=link&utm_campaign=custom-price-pro&utm_content=plugin-list' : 'https://wpdesk.net/products/custom-price-for-woocommerce-pro/?utm_source=wp-admin-plugins&utm_medium=link&utm_campaign=custom-price-pro&utm_content=plugin-list';
+		$upgrade_url = \get_locale() === 'pl_PL' ? 'https://www.wpdesk.pl/sk/custom-price-for-woocommerce-pro-pl' : 'https://wpdesk.net/sk/custom-price-for-woocommerce-pro-en';
 		if ( ! \is_plugin_active( 'custom-price-for-woocommerce-pro/custom-price-for-woocommerce-pro.php' ) ) {
 			$links[] = '<a href="' . esc_url( $upgrade_url ) . '" target="_blank" style="color:#FF9743;font-weight:bold;">' . __( 'Upgrade to PRO', 'custom-price-for-woocommerce' ) . ' &rarr;</a>';
 		}

@@ -1,9 +1,9 @@
 <?php return array(
     'root' => array(
         'name' => 'wpdesk/custom-price-for-woocommerce',
-        'pretty_version' => '1.1.17',
-        'version' => '1.1.17.0',
-        'reference' => '34e4a36dbd1743a7284fb927f9628a7c233f24d7',
+        'pretty_version' => '1.1.22',
+        'version' => '1.1.22.0',
+        'reference' => '62b5fa260c03dfe07f3f6a2e20cb4e07b1d0db74',
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -29,9 +29,9 @@
             'dev_requirement' => false,
         ),
         'wpdesk/custom-price-for-woocommerce' => array(
-            'pretty_version' => '1.1.17',
-            'version' => '1.1.17.0',
-            'reference' => '34e4a36dbd1743a7284fb927f9628a7c233f24d7',
+            'pretty_version' => '1.1.22',
+            'version' => '1.1.22.0',
+            'reference' => '62b5fa260c03dfe07f3f6a2e20cb4e07b1d0db74',
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

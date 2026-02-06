@@ -22,13 +22,13 @@ class CoreCompatibility
      *
      * @var array
      */
-    private static $is_wc_version_gte = array();
+    private static $is_wc_version_gte = [];
     /**
      * Cache 'gt' comparison results.
      *
      * @var array
      */
-    private static $is_wc_version_gt = array();
+    private static $is_wc_version_gt = [];
     /**
      * Helper method to get the version of the currently installed WooCommerce.
      *
@@ -105,7 +105,7 @@ class CoreCompatibility
     {
         if (self::is_wc_version_gte('3.0.0')) {
             $get_fn = 'get_' . $name;
-            return is_callable(array($obj, $get_fn)) ? $obj->{$get_fn}($context) : $obj->get_meta('_' . $name, \true);
+            return is_callable([$obj, $get_fn]) ? $obj->{$get_fn}($context) : $obj->get_meta('_' . $name, \true);
         } else {
             if ('status' === $name) {
                 $value = isset($obj->post->post_status) ? $obj->post->post_status : null;
@@ -131,7 +131,7 @@ class CoreCompatibility
     {
         if (self::is_wc_version_gte('3.0.0')) {
             $set_fn = 'set_' . $name;
-            if (is_callable(array($obj, $set_fn))) {
+            if (is_callable([$obj, $set_fn])) {
                 $obj->{$set_fn}($value);
             } else {
                 $obj->add_meta_data('_' . $name, $value, \true);

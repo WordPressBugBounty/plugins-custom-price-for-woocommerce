@@ -92,7 +92,7 @@ class Display implements Hookable
     public function cpw_style()
     {
         $suffix = defined('SCRIPT_DEBUG') && \SCRIPT_DEBUG ? '' : '';
-        //'.min';
+        // '.min';
         wp_enqueue_style('woocommerce-cpw', $this->plugin_url . 'assets/css/frontend/front' . $suffix . '.css', \false, time());
         wp_style_add_data('woocommerce-cpw', 'rtl', 'replace');
         if ($suffix) {
@@ -176,7 +176,7 @@ class Display implements Hookable
             return;
         }
         $suffix = isset($args['suffix']) ? $args['suffix'] : '';
-        //$price    = Helper::get_price_value_attr( $product, $suffix );
+        // $price    = Helper::get_price_value_attr( $product, $suffix );
         $counter = Helper::get_counter();
         $input_id = 'cpw-' . $counter;
         $type = (int) $product->get_meta('_suggested_price_type', \true);
@@ -332,7 +332,6 @@ class Display implements Hookable
      */
     public function single_add_to_cart_text(string $text, $product): string
     {
-        //pre( $product );
         if (Helper::is_cpw($product)) {
             $cpw_text = trim(apply_filters('wc_cpw_single_add_to_cart_text', get_option('woocommerce_cpw_button_text_single', __('Add to cart', 'woocommerce')), $product));
             if (!Integration::is_super()) {

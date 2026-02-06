@@ -68,7 +68,7 @@ class Admin implements Hookable
         }
         // Enqueue and localize.
         $suffix = defined('SCRIPT_DEBUG') && \SCRIPT_DEBUG ? '' : '';
-        //'.min';
+        // '.min';
         wp_enqueue_script('woocommerce_cpw_metabox', $this->plugin_url . '/assets/js/admin/metabox' . $suffix . '.js', ['jquery'], time(), \true);
         $strings = ['enter_value' => __('Enter a value', 'custom-price-for-woocommerce'), 'price_adjust' => __('Enter a value (fixed or %)', 'custom-price-for-woocommerce'), 'simple_types' => Helper::get_simple_supported_types(), 'variable_types' => Helper::get_variable_supported_types()];
         wp_localize_script('woocommerce_cpw_metabox', 'woocommerce_cpw_metabox', $strings);

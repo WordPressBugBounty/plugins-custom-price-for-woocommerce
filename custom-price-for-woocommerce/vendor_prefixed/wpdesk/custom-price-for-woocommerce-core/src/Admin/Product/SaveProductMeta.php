@@ -174,7 +174,7 @@ class SaveProductMeta implements Hookable
             $variation->set_price($sort_price);
             $variation->set_regular_price($sort_price);
             $variation->set_sale_price('');
-            if (isset($_POST['product-type']) && 'variable-subscription' === sanitize_key($_POST['product-type'])) {
+            if (isset($_POST['product-type']) && in_array(sanitize_key($_POST['product-type']), ['variable-subscription', 'fsb-variable-subscription'], \true)) {
                 $variation->update_meta_data('_subscription_price', $sort_price);
             }
         }

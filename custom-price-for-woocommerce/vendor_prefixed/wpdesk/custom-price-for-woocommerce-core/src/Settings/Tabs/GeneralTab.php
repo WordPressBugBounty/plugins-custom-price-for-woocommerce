@@ -36,7 +36,7 @@ class GeneralTab extends BaseTab implements Hookable
         if ($current_section !== $this->tab_id) {
             return $settings;
         }
-        $docs_url = \get_locale() === 'pl_PL' ? 'https://www.wpdesk.pl/docs/wlasna-cena-produktu-woocommerce/?utm_source=custom-price-settings&utm_medium=link&utm_campaign=custom-price-docs-link&utm_content=general-settings' : 'https://wpdesk.net/docs/docs-custom-price-for-woocommerce/?utm_source=custom-price-settings&utm_medium=link&utm_campaign=custom-price-docs-link&utm_content=general-settings';
+        $docs_url = \get_locale() === 'pl_PL' ? 'https://www.wpdesk.pl/sk/custom-price-for-woocommerce-core-docs-pl' : 'https://wpdesk.net/sk/custom-price-for-woocommerce-core-docs-en';
         $settings[] = ['title' => __('Custom Price', 'custom-price-for-woocommerce'), 'type' => 'title', 'desc' => sprintf(
             // translators: Docs link.
             esc_html__('Read more in the %1$splugin documentation →%2$s', 'custom-price-for-woocommerce'),
@@ -46,7 +46,7 @@ class GeneralTab extends BaseTab implements Hookable
         if (Integration::is_super()) {
             $settings[] = ['title' => __('Price Label', 'custom-price-for-woocommerce'), 'desc' => __('This is the text that appears above the Custom Price input field.', 'custom-price-for-woocommerce'), 'id' => 'woocommerce_cpw_label_text', 'type' => 'text', 'css' => 'min-width:300px;', 'default' => __('Price', 'custom-price-for-woocommerce'), 'desc_tip' => \true];
         } else {
-            $buy_pro_url = \get_locale() === 'pl_PL' ? 'https://www.wpdesk.pl/sklep/wlasna-cena-produktu-woocommerce-pro/?utm_source=wp-admin-plugins&utm_medium=link&utm_campaign=custom-price-pro&utm_content=plugin-settings' : 'https://wpdesk.net/products/custom-price-for-woocommerce-pro/?utm_source=wp-admin-plugins&utm_medium=link&utm_campaign=custom-price-pro&utm_content=plugin-settings';
+            $buy_pro_url = \get_locale() === 'pl_PL' ? 'https://www.wpdesk.pl/sk/custom-price-for-woocommerce-core-pro-set-pl' : 'https://wpdesk.net/sk/custom-price-for-woocommerce-core-pro-set-en';
             $settings[] = ['title' => __('Price Label', 'custom-price-for-woocommerce'), 'desc' => sprintf(
                 // translators: Upgrade to PRO link.
                 esc_html__('%1$sUpgrade to PRO →%2$s and enable options below%3$s', 'custom-price-for-woocommerce'),
