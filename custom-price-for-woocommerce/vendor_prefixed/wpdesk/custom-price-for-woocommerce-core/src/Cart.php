@@ -11,7 +11,7 @@ class Cart implements Hookable
     /**
      * Holds the custom prices for products in the cart.
      *
-     * @var array<int, string>
+     * @var array<string, float>
      */
     private array $cpw_prices = [];
     private array $price_filters = ['woocommerce_product_get_price', 'woocommerce_product_get_regular_price', 'woocommerce_product_get_sale_price', 'woocommerce_product_variation_get_price', 'woocommerce_product_variation_get_regular_price', 'woocommerce_product_variation_get_sale_price'];
@@ -35,7 +35,9 @@ class Cart implements Hookable
         // First, prepare the product objects in the cart
         foreach (WC()->cart->get_cart() as $cart_item_key => $cart_item) {
             if (isset($cart_item['cpw']) && $cart_item['data'] instanceof \WC_Product) {
-                $this->cpw_prices[$cart_item['data']->get_id()] = $cart_item['cpw'];
+                $product = $cart_item['data'];
+                $this->cpw_prices[$cart_item_key] = $cart_item['cpw'];
+                $product->update_meta_data('_cpw_cart_item_key', $cart_item_key);
             }
         }
         if (count($this->cpw_prices) === 0) {
@@ -59,8 +61,9 @@ class Cart implements Hookable
      */
     public function set_cpw_price_for_product($price, $product)
     {
-        if (isset($this->cpw_prices[$product->get_id()])) {
-            return $this->cpw_prices[$product->get_id()];
+        $cart_item_key = $product->get_meta('_cpw_cart_item_key', \true);
+        if ($cart_item_key && isset($this->cpw_prices[$cart_item_key])) {
+            return $this->cpw_prices[$cart_item_key];
         }
         return $price;
     }
