@@ -3,13 +3,13 @@
  * Plugin Name: Custom Price for WooCommerce
  * Plugin URI: https://wpdesk.net/sk/custom-price-pl
  * Description: Allow customers to name product prices in WooCommerce. Receive donations and sell WooCommerce products at custom prices.
- * Version: 1.1.25
+ * Version: 1.1.26
  * Author: WP Desk
  * Author URI: https://www.wpdesk.net/sk/custom-price-for-woocommerce-author
  * Text Domain: custom-price-for-woocommerce
  * Domain Path: /lang/
  * Requires at least: 6.4
- * Tested up to: 6.9
+ * Tested up to: 7.0
  * WC requires at least: 10.4
  * WC tested up to: 10.8
  * Requires PHP: 7.4
@@ -35,7 +35,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 
 /* THESE TWO VARIABLES CAN BE CHANGED AUTOMATICALLY */
-$plugin_version = '1.1.25';
+$plugin_version = '1.1.26';
 $plugin_release_timestamp = '2022-12-15 10:29';
 
 $plugin_name        = 'Custom Price for WooCommerce';
