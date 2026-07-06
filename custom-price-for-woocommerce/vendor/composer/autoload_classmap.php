@@ -298,6 +298,7 @@ return array(
     'CPWFreeVendor\\WPDesk_Tracker_Sender' => $baseDir . '/vendor_prefixed/wpdesk/wp-wpdesk-tracker/src/sender/class-wpdesk-tracker-sender.php',
     'CPWFreeVendor\\WPDesk_Tracker_Sender_Exception_WpError' => $baseDir . '/vendor_prefixed/wpdesk/wp-wpdesk-tracker/src/sender/Exception/class-wpdesk-tracker-sender-exception-wperror.php',
     'CPWFreeVendor\\WPDesk_Tracker_Sender_Logged' => $baseDir . '/vendor_prefixed/wpdesk/wp-wpdesk-tracker/src/sender/class-wpdesk-tracker-sender-logged.php',
+    'CPWFreeVendor\\WPDesk_Tracker_Sender_Resolver' => $baseDir . '/vendor_prefixed/wpdesk/wp-wpdesk-tracker/src/sender/class-wpdesk-tracker-sender-resolver.php',
     'CPWFreeVendor\\WPDesk_Tracker_Sender_Wordpress_To_WPDesk' => $baseDir . '/vendor_prefixed/wpdesk/wp-wpdesk-tracker/src/sender/class-wpdesk-tracker-sender-wordpress-to-wpdesk.php',
     'CPWFreeVendor\\WPDesk_Translable' => $baseDir . '/vendor_prefixed/wpdesk/wp-builder/src/Plugin/WithoutNamespace/Translable.php',
     'CPWFreeVendor\\WPDesk_Translatable' => $baseDir . '/vendor_prefixed/wpdesk/wp-builder/src/Plugin/WithoutNamespace/Translatable.php',

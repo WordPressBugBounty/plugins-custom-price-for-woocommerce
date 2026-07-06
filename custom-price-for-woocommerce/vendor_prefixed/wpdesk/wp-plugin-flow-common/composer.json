@@ -9,8 +9,12 @@
     "homepage": "https:\/\/gitlab.com\/wpdesk\/library\/wp-plugin-flow-common",
     "authors": [
         {
-            "name": "Krzysiek",
-            "email": "krzysiek@wpdesk.pl"
+            "name": "WP Desk",
+            "homepage": "https:\/\/wpdesk.net"
+        },
+        {
+            "name": "Octolize",
+            "homepage": "https:\/\/octolize.com"
         }
     ],
     "config": {
