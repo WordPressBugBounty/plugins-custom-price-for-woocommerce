@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit110e6981f4629c4147315dff8325935d
+class ComposerStaticInit2359603a034d0e30ba7c99e852625716
 {
     public static $prefixLengthsPsr4 = array (
         'W' =>
@@ -270,12 +270,13 @@ class ComposerStaticInit110e6981f4629c4147315dff8325935d
         'CPWFreeVendor\\WPDesk\\Plugin\\Flow\\Initialization\\Simple\\SimplePaidStrategy' => __DIR__ . '/../..' . '/vendor_prefixed/wpdesk/wp-plugin-flow-common/src/Initialization/Simple/SimplePaidStrategy.php',
         'CPWFreeVendor\\WPDesk\\Plugin\\Flow\\Initialization\\Simple\\TrackerInstanceAsFilterTrait' => __DIR__ . '/../..' . '/vendor_prefixed/wpdesk/wp-plugin-flow-common/src/Initialization/TrackerInstanceAsFilterTrait.php',
         'CPWFreeVendor\\WPDesk\\Plugin\\Flow\\PluginBootstrap' => __DIR__ . '/../..' . '/vendor_prefixed/wpdesk/wp-plugin-flow-common/src/PluginBootstrap.php',
-        'CPWFreeVendor\\WPDesk\\Tracker\\Assets' => __DIR__ . '/../..' . '/vendor_prefixed/wpdesk/wp-wpdesk-tracker/src/PSR/WPDesk/Tracker/Assets.php',
-        'CPWFreeVendor\\WPDesk\\Tracker\\OptInOptOut' => __DIR__ . '/../..' . '/vendor_prefixed/wpdesk/wp-wpdesk-tracker/src/PSR/WPDesk/Tracker/OptInOptOut.php',
-        'CPWFreeVendor\\WPDesk\\Tracker\\OptInPage' => __DIR__ . '/../..' . '/vendor_prefixed/wpdesk/wp-wpdesk-tracker/src/PSR/WPDesk/Tracker/OptInPage.php',
-        'CPWFreeVendor\\WPDesk\\Tracker\\OptOut' => __DIR__ . '/../..' . '/vendor_prefixed/wpdesk/wp-wpdesk-tracker/src/PSR/WPDesk/Tracker/OptOut.php',
-        'CPWFreeVendor\\WPDesk\\Tracker\\PluginActionLinks' => __DIR__ . '/../..' . '/vendor_prefixed/wpdesk/wp-wpdesk-tracker/src/PSR/WPDesk/Tracker/PluginActionLinks.php',
-        'CPWFreeVendor\\WPDesk\\Tracker\\Shop' => __DIR__ . '/../..' . '/vendor_prefixed/wpdesk/wp-wpdesk-tracker/src/PSR/WPDesk/Tracker/Shop.php',
+        'CPWFreeVendor\\WPDesk\\Tracker\\Assets' => __DIR__ . '/../..' . '/vendor_prefixed/wpdesk/wp-wpdesk-tracker/src/Tracker/Assets.php',
+        'CPWFreeVendor\\WPDesk\\Tracker\\OptInOptOut' => __DIR__ . '/../..' . '/vendor_prefixed/wpdesk/wp-wpdesk-tracker/src/Tracker/OptInOptOut.php',
+        'CPWFreeVendor\\WPDesk\\Tracker\\OptInPage' => __DIR__ . '/../..' . '/vendor_prefixed/wpdesk/wp-wpdesk-tracker/src/Tracker/OptInPage.php',
+        'CPWFreeVendor\\WPDesk\\Tracker\\OptOut' => __DIR__ . '/../..' . '/vendor_prefixed/wpdesk/wp-wpdesk-tracker/src/Tracker/OptOut.php',
+        'CPWFreeVendor\\WPDesk\\Tracker\\PluginActionLinks' => __DIR__ . '/../..' . '/vendor_prefixed/wpdesk/wp-wpdesk-tracker/src/Tracker/PluginActionLinks.php',
+        'CPWFreeVendor\\WPDesk\\Tracker\\Shop' => __DIR__ . '/../..' . '/vendor_prefixed/wpdesk/wp-wpdesk-tracker/src/Tracker/Shop.php',
+        'CPWFreeVendor\\WPDesk\\Tracker\\Tracker' => __DIR__ . '/../..' . '/vendor_prefixed/wpdesk/wp-wpdesk-tracker/src/Tracker/Tracker.php',
         'CPWFreeVendor\\WPDesk\\View\\PluginViewBuilder' => __DIR__ . '/../..' . '/vendor_prefixed/wpdesk/wp-view/src/PluginViewBuilder.php',
         'CPWFreeVendor\\WPDesk\\View\\Renderer\\LoadTemplatePlugin' => __DIR__ . '/../..' . '/vendor_prefixed/wpdesk/wp-view/src/Renderer/LoadTemplatePlugin.php',
         'CPWFreeVendor\\WPDesk\\View\\Renderer\\Renderer' => __DIR__ . '/../..' . '/vendor_prefixed/wpdesk/wp-view/src/Renderer/Renderer.php',
@@ -356,9 +357,9 @@ class ComposerStaticInit110e6981f4629c4147315dff8325935d
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit110e6981f4629c4147315dff8325935d::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit110e6981f4629c4147315dff8325935d::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit110e6981f4629c4147315dff8325935d::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit2359603a034d0e30ba7c99e852625716::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit2359603a034d0e30ba7c99e852625716::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit2359603a034d0e30ba7c99e852625716::$classMap;
 
         }, null, ClassLoader::class);
     }
