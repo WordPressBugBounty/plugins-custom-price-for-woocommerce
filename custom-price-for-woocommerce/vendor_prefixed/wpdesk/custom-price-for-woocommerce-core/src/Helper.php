@@ -276,7 +276,7 @@ class Helper
         if (!$product) {
             return \false;
         }
-        $is_hidden = $product && wc_string_to_bool($product->get_meta('_hide_cpw_minimum')) ? \true : \false;
+        $is_hidden = wc_string_to_bool($product->get_meta('_hide_cpw_minimum'));
         return apply_filters('wc_cpw_is_minimum_hidden', $is_hidden, $product->get_id(), $product);
     }
     /**
@@ -924,9 +924,9 @@ class Helper
         return apply_filters('wc_cpw_subscription_strings', $strings, $number, $period);
     }
     /**
-     * @param int|\WC_Product $product_id A WC_Product object or product ID
+     * @param mixed $product A WC_Product object or product ID
      *
-     * @return \WC_Product
+     * @return \WC_Product|false|null
      * @since 1.0.0
      */
     public static function maybe_get_product_instance($product)

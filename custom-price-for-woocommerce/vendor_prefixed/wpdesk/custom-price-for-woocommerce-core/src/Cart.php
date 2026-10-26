@@ -32,9 +32,10 @@ class Cart implements Hookable
     }
     public function add_calculation_price_filter(): void
     {
-        // First, prepare the product objects in the cart
+        $this->cpw_prices = [];
+        // Only the actual product/variation in the cart can authorize a custom price.
         foreach (WC()->cart->get_cart() as $cart_item_key => $cart_item) {
-            if (isset($cart_item['cpw']) && $cart_item['data'] instanceof \WC_Product) {
+            if (isset($cart_item['cpw'], $cart_item['data']) && $cart_item['data'] instanceof \WC_Product && Helper::is_cpw_product($cart_item['data'])) {
                 $product = $cart_item['data'];
                 $this->cpw_prices[$cart_item_key] = $cart_item['cpw'];
                 $product->update_meta_data('_cpw_cart_item_key', $cart_item_key);
@@ -117,6 +118,10 @@ class Cart implements Hookable
         $cpw_id = $variation_id ? $variation_id : $product_id;
         $suffix = Helper::get_suffix($cpw_id);
         $product = Helper::maybe_get_product_instance($cpw_id);
+        if (!$product instanceof WC_Product || !Helper::is_cpw_product($product)) {
+            unset($cart_item_data['cpw'], $cart_item_data['cpw_period']);
+            return $cart_item_data;
+        }
         // get_posted_price() removes the thousands separators.
         $posted_price = Helper::get_posted_price($product, $suffix);
         // Is this an NYP item?
@@ -152,7 +157,12 @@ class Cart implements Hookable
      */
     public function get_cart_item_from_session(array $cart_item, array $values): array
     {
-        // No need to check is_cpw b/c this has already been validated by validate_add_cart_item().
+        $product = $cart_item['data'] ?? null;
+        if (!$product instanceof WC_Product || !Helper::is_cpw_product($product)) {
+            unset($cart_item['cpw'], $cart_item['cpw_period']);
+            return $cart_item;
+        }
+        // Legitimate CPW session values are retained without posted input or a nonce.
         if (isset($values['cpw'])) {
             $cart_item['cpw'] = $values['cpw'];
             // Add the subscription billing period.
@@ -177,6 +187,9 @@ class Cart implements Hookable
                 continue;
             }
             $product = $cart_item['data'];
+            if (!$product instanceof WC_Product || !Helper::is_cpw_product($product)) {
+                continue;
+            }
             $product->set_regular_price($cart_item['cpw']);
             $product->set_price($cart_item['cpw']);
             $product->set_sale_price($cart_item['cpw']);
@@ -191,12 +204,12 @@ class Cart implements Hookable
                     if ($original_length > 0 && $original_period && $cart_item['cpw_period'] !== $original_period) {
                         $factors = Helper::annual_price_factors();
                         $new_length = $original_length * $factors[$cart_item['cpw_period']] / $factors[$original_period];
-                        $product->update_meta_data('_subscription_length', floor($new_length));
+                        $product->update_meta_data('_subscription_length', (string) floor($new_length));
                     }
                     // Set period to the chosen period.
                     $product->update_meta_data('_subscription_period', $cart_item['cpw_period']);
                     // Variable billing period is always a "per" interval.
-                    $product->update_meta_data('_subscription_period_interval', 1);
+                    $product->update_meta_data('_subscription_period_interval', '1');
                 }
             }
         }

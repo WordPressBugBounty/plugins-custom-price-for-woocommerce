@@ -2,7 +2,6 @@
 
 namespace CPWFreeVendor\WPDesk\Tracker;
 
-use CPWFreeVendor\WPDesk\PluginBuilder\Plugin\Hookable;
 use CPWFreeVendor\WPDesk\View\Renderer\SimplePhpRenderer;
 use CPWFreeVendor\WPDesk\View\Resolver\DirResolver;
 class OptInPage implements Hookable

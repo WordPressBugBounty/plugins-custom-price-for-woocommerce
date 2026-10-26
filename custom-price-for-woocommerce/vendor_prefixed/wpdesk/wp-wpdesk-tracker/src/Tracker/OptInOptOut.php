@@ -2,8 +2,6 @@
 
 namespace CPWFreeVendor\WPDesk\Tracker;
 
-use CPWFreeVendor\WPDesk\PluginBuilder\Plugin\HookableCollection;
-use CPWFreeVendor\WPDesk\PluginBuilder\Plugin\HookableParent;
 class OptInOptOut implements HookableCollection
 {
     use HookableParent;

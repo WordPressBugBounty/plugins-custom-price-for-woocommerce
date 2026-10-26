@@ -14,13 +14,23 @@
             "email": "piotr.potrebka@wpdesk.net"
         }
     ],
+    "repositories": {
+        "wpdesk": {
+            "type": "composer",
+            "url": "https:\/\/gitlab.wpdesk.dev\/api\/v4\/group\/wpdesk\/-\/packages\/composer\/"
+        }
+    },
     "config": {
         "sort-packages": true,
+        "platform": {
+            "php": "8.2.0"
+        },
         "allow-plugins": {
             "cweagans\/composer-patches": true,
             "dealerdirect\/phpcodesniffer-composer-installer": true,
             "wpdesk\/wp-wpdesk-composer": true,
-            "phpstan\/extension-installer": true
+            "phpstan\/extension-installer": true,
+            "wpdesk\/wp-codeception": true
         }
     },
     "require": {
@@ -35,10 +45,11 @@
         "mockery\/mockery": "*",
         "phpunit\/phpunit": "^9",
         "wp-cli\/wp-cli": "^2",
-        "wp-cli\/wp-cli-bundle": "^2",
+        "wp-cli\/wp-cli-bundle": "2.11.*",
         "wpdesk\/phpstan-rules": "^1.1",
         "wpdesk\/wp-builder": "^2.1",
-        "wpdesk\/wp-code-sniffer": "^1.2.3"
+        "wpdesk\/wp-code-sniffer": "^1.2.3",
+        "wpdesk\/wp-codeception": "^3"
     },
     "autoload": {
         "psr-4": {
